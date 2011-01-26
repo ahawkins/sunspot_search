@@ -72,3 +72,12 @@ if defined?(ActiveRecord::Base)
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
 end
+
+require 'sunspot'
+require 'sunspot_rails'
+
+Sunspot::Rails::Server.new.start
+
+at_exit do
+  Sunspot::Rails::Server.new.stop
+end
