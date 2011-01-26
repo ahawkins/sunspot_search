@@ -15,5 +15,15 @@ RSpec::Core::RakeTask.new(:rcov) do |spec|
   spec.rcov = true
 end
 
-Cucumber::Rake::Task.new(:cucumber)
-task :default => :spec
+namespace :cucumber do
+  Cucumber::Rake::Task.new(:ok, 'Run all features that should pass')
+  Cucumber::Rake::Task.new(:wip, 'Run features that are being worked in') do |t|
+    t.profile = 'wip'
+  end
+
+  task :default => :ok
+end
+task :cucumber => 'cucumber:ok'
+
+
+task :default => [:spec, :cucumber]

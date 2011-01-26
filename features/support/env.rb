@@ -11,7 +11,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec/rails_app/config/
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.logger = nil
 
-ActiveRecord::Migrator.migrate(File.expand_path("../../spec/rails_app/db/migrate/", __FILE__))
+ActiveRecord::Migrator.migrate(File.expand_path("../../../spec/rails_app/db/migrate/", __FILE__))
 
 require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
 require 'cucumber/rails/world'
