@@ -1,5 +1,7 @@
 module SolrSearch
   class Search < ActiveRecord::Base
+    cattr_accessor :form_configuration
+
     serialize :options, Hash
     
     class << self
@@ -12,6 +14,12 @@ module SolrSearch
 
         name = to_s
         name.match(/(.+)Search/)[1].constantize
+      end
+
+      def configuration
+        new_configuration = FormConfiguration.new
+        yield(new_configuration)
+        self.form_configuration = new_configuration
       end
     end
 
@@ -42,8 +50,12 @@ module SolrSearch
       options[:match] = mode
     end
 
-    def order_by=(attribute)
-      options[:order_by] = attribute
+    def sort_by=(attribute)
+      options[:sort_by] = attribute
+    end
+
+    def sort_direction=(direction)
+      options[:sort_direction] = direction
     end
 
     def per_page=(amount)
@@ -66,8 +78,12 @@ module SolrSearch
       options[:conditions]
     end
 
-    def order_by
-      options[:order_by]
+    def sort_by
+      options[:sort_by]
+    end
+
+    def sort_direction
+      options[:sort_direction]
     end
 
     def per_page
@@ -88,6 +104,10 @@ module SolrSearch
       else
         self[:options]
       end
+    end
+
+    def search_class
+      self.class.search_class
     end
 
     def run

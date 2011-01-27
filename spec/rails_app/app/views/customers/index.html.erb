@@ -1,6 +1,10 @@
 <div id="#search_form">
   <%= search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
     <%= form.keywords %>
+    <%= form.inputs 'Sort Options' do %>
+      <%= form.sort_by %>
+      <%= form.sort_direction %>
+    <% end %>
     <%= form.buttons do %>
       <%= form.commit_button 'Search' %>
     <% end %>

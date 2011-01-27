@@ -8,9 +8,10 @@ module SolrSearch
   # the SolrSearch model and the Sunspot query interface
   class SearchBuilder
     def self.run(search)
-      Sunspot.search search.class.search_class do
+      Sunspot.search search.search_class do
         # now translate the options
         keywords search.keywords
+        order_by search.sort_by.to_sym, search.sort_direction.to_sym
       end
     end
   end

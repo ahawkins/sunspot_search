@@ -4,6 +4,8 @@ module SolrSearch
   autoload :DSL, 'solr_search/dsl'
   autoload :SearchFormHelper, 'solr_search/search_form_helper'
   autoload :SearchBuilder, 'solr_search/search_builder'
+  autoload :FormBuilder, 'solr_search/form_builder'
+  autoload :FormConfiguration, 'solr_search/form_configuration'
 end
 
 if defined?(::Rails)

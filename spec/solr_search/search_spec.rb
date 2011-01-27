@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe Search do 
+  describe "the class" do
+    it "should have an accessor for the form configuration" do
+      subject.should respond_to(:form_configuration)
+      subject.should respond_to(:form_configuration=)
+    end
+  end
+
   describe "When there is no options" do
     subject { Search.new }
 
@@ -37,9 +44,9 @@ describe Search do
     subject.match.should eql(:all)
   end
 
-  it "should put the order in the options" do
-    subject.order_by = :name
-    subject.order_by.should eql(:name)
+  it "should put the sort in the options" do
+    subject.sort_by = :name
+    subject.sort_by.should eql(:name)
   end
 
   it "should put the per page amount in the options" do
@@ -80,9 +87,9 @@ describe Search do
     subject.conditions.should eql({})
   end
 
-  it "should delegate order to options" do
-    subject.options.should_receive(:[]).with(:order_by).and_return([])
-    subject.order_by.should eql([])
+  it "should delegate sort_by to options" do
+    subject.options.should_receive(:[]).with(:sort_by).and_return([])
+    subject.sort_by.should eql([])
   end
 
   it "should per_page order to options" do

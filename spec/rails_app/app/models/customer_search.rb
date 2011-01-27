@@ -2,6 +2,33 @@
 # search container is correctly 
 # detected from the class name
 class CustomerSearch < SolrSearch::Search
+
+  configuration do |form|
+    form.sort_option do |option|
+      option.attribute :sort_name
+      option.name 'Name'
+    end
+  
+    form.sort_option do |option|
+      option.attribute :sort_name
+      option.name 'Company'
+    end
+  end
+  
+  # Set the form configurations options
+  
+  # configuration do |form|
+  #   form.order_option do |option|
+  #     options.attribute 'sort_name'
+  #     options.name 'Name'
+  #   end
+  # 
+  #   form.order_option do |option|
+  #     options.attribute 'sort_company'
+  #     options.name 'Company'
+  #   end
+  # end
+
   # run do
   #   keywords 'double legit programmers'
   #   highlight :name, :bio

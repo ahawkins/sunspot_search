@@ -9,17 +9,9 @@ module SolrSearch
       # search form
 
       options = args.extract_options!
-      options[:builder] = SolrSearchFormBuilder
+      options[:builder] = FormBuilder
 
       semantic_form_for(record_or_name_or_array, *(args << options), &proc)
-    end
-    
-
-    class SolrSearchFormBuilder < ::Formtastic::SemanticFormBuilder
-      def keywords(options = {})
-        options.reverse_merge!(:label => 'Search')
-        input :keywords, options
-      end
     end
   end
 end
