@@ -48,29 +48,14 @@ module SolrSearch
   # end
   class FormConfiguration
     attr_accessor :sort_attributes
-    attr_accessor :sort_asc_label, :sort_desc_label
+    attr_accessor :pagination_options
 
     def sort_option
+      raise RuntimeError, "This method requires a block" unless block_given?
       self.sort_attributes ||= []
       new_attribute = Attribute.new
-      dsl = AttributeDSL.new(new_attribute)
-      yield(dsl)
+      yield(new_attribute)
       self.sort_attributes << new_attribute
-    end
-
-    private
-    class AttributeDSL
-      def initialize(object)
-        @attribute = object
-      end
-
-      def name(arg)
-        @attribute.name = arg
-      end
-
-      def attribute(arg)
-        @attribute.attribute = arg
-      end
     end
 
     class Attribute

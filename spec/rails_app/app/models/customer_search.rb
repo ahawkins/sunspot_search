@@ -5,14 +5,16 @@ class CustomerSearch < SolrSearch::Search
 
   configuration do |form|
     form.sort_option do |option|
-      option.attribute :sort_name
-      option.name 'Name'
+      option.attribute = :sort_name
+      option.name = 'Name'
     end
   
     form.sort_option do |option|
-      option.attribute :sort_name
-      option.name 'Company'
+      option.attribute = :sort_name
+      option.name = 'Company'
     end
+
+    form.pagination_options = 50, 100, 150, 200
   end
   
   # Set the form configurations options

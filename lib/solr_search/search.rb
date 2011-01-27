@@ -3,7 +3,7 @@ module SolrSearch
     cattr_accessor :form_configuration
 
     serialize :options, Hash
-    
+
     class << self
       def searches(klass)
         @searches = klass
@@ -21,6 +21,14 @@ module SolrSearch
         yield(new_configuration)
         self.form_configuration = new_configuration
       end
+    end
+
+    def form_configuration
+      self.class.form_configuration
+    end
+
+    def search_class
+      self.class.search_class
     end
 
     def conditions_attributes=(attributes)
@@ -104,10 +112,6 @@ module SolrSearch
       else
         self[:options]
       end
-    end
-
-    def search_class
-      self.class.search_class
     end
 
     def run

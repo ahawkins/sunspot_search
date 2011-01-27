@@ -33,3 +33,12 @@ Feature: Basic Search
      | Name             | Company            |
      | Shaun Densberger | Python Programmers |
      | Adam Hawkins     | Ruby Programmers   |
+
+  Scenario: The form has some pagination configuration
+    When I go to the home page
+    Then I should see the following options for "Per page": 
+      | option |
+      | 50     | 
+      | 100    |
+      | 150    |
+      | 200    |

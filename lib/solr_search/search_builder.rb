@@ -10,8 +10,14 @@ module SolrSearch
     def self.run(search)
       Sunspot.search search.search_class do
         # now translate the options
-        keywords search.keywords
-        order_by search.sort_by.to_sym, search.sort_direction.to_sym
+        
+        if search.keywords
+          keywords search.keywords
+        end
+
+        if search.sort_by && search.sort_direction
+          order_by search.sort_by, search.sort_direction
+        end
       end
     end
   end

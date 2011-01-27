@@ -6,7 +6,7 @@ module SolrSearch
     end
 
     def sort_by(options = {})
-      attributes = @object.class.form_configuration.sort_attributes
+      attributes = @object.form_configuration.sort_attributes
       collection = attributes.each.inject({}) {|hash, attr| hash[attr.name] = attr.attribute ; hash }
       options.reverse_merge!(:label => 'Sort by', :collection => collection)
       input :sort_by, options
@@ -17,6 +17,12 @@ module SolrSearch
       options.reverse_merge!(defaults)
       options[:collection] = { defaults[:asc_label] => 'asc', defaults[:desc_label] => 'desc' }
       input :sort_direction, options
+    end
+
+    def pagination_options(options = {})
+      defaults = { :as => :select, :collection => @object.form_configuration.pagination_options }
+      options.reverse_merge!(defaults)
+      input :per_page, options
     end
   end
 end
