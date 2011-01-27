@@ -1,3 +1,4 @@
 pkg/*
 *.gem
 .bundle
+spec/rails_app/solr

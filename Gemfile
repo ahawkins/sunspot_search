@@ -14,5 +14,7 @@ group :development do
   gem 'sunspot_rails'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'formtastic'
+  gem 'launchy'
 end
 

@@ -7,15 +7,13 @@ Feature: Basic Search
      * Order Fields
      * Choosing Fields for keyword searches
 
-  @wip
   Scenario: The users keywords matches a customer
     Given there is this customer: 
      | Name         | Company  |
      | Adam Hawkins | Radium   |
-   And the customers are in solr
-   When I go to the customers page
+   When I go to the home page
    And I fill in "Search" with "Adam"
    And I press "Search"
    Then I should see the following customer:
-    | Name | Company |
-    | Adam | Radium | 
+    | Name         | Company |
+    | Adam Hawkins | Radium | 

@@ -1,0 +1,27 @@
+<div id="#search_form">
+  <%= search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
+    <%= form.keywords %>
+    <%= form.buttons do %>
+      <%= form.commit_button 'Search' %>
+    <% end %>
+  <% end %> 
+</div>
+
+<% if @customers %>
+  <table id="customers">
+    <thead>
+      <tr>
+        <th class="name">Name</th>
+        <th class="company">Company</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @customers.each_hit_with_result do |hit, customer| %>
+        <tr>
+          <td class="name"><%= customer.name %></td>
+          <td class="company"><%= customer.company %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

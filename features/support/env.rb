@@ -4,10 +4,22 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+# Load some stuff that seems to have issues loading in this setup
+# Apparently the formtastic railtie is not loaded when booting
+# the test application in this manner, so we have to manually
+# require the railtie for formtastic (and any future gems)
+
+require 'action_view'
+require 'formtastic'
+require 'formtastic/railtie'
+
+# "Boot" the test application
+
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(File.dirname(__FILE__) + '/../../spec/rails_app/config/environment')
 
 # Create the test application's database
+
 ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.logger = nil
 
@@ -77,7 +89,10 @@ require 'sunspot'
 require 'sunspot_rails'
 
 Sunspot::Rails::Server.new.start
+sleep(2) # have to sleep to let the server start
 
 at_exit do
   Sunspot::Rails::Server.new.stop
 end
+
+Customer.remove_all_from_index!

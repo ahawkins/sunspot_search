@@ -7,11 +7,19 @@ describe Search do
     it "should initialize conditions to an emtpy array" do
       subject.conditions.should eql([])
     end
+
+    it "should not have nil options" do
+      subject.options.should_not be_nil
+    end
+
+    it "should not raise an error when attributes are passed in" do
+      lambda { Search.new :keywords => 'oh hai' }.should_not raise_error
+    end
   end
 
   it "should put the keywords in the options" do
-    subject.keywords = 'a','b','c'
-    subject.keywords.should eql(%w(a b c))
+    subject.keywords = 'double legit programmers'
+    subject.keywords.should eql('double legit programmers')
   end
 
   it "should put the hlighlight words in the options" do

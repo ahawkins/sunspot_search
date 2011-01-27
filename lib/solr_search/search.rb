@@ -1,8 +1,6 @@
 module SolrSearch
   class Search < ActiveRecord::Base
-    serialize :options
-
-    after_initialize :initialize_options
+    serialize :options, Hash
     
     class << self
       def searches(klass)
@@ -27,8 +25,8 @@ module SolrSearch
       options[:conditions] = array
     end
 
-    def keywords=(args)
-      options[:keywords] = *args
+    def keywords=(words)
+      options[:keywords] = words
     end
 
     def highlight=(args)
@@ -84,18 +82,16 @@ module SolrSearch
       options[:match]
     end
 
-    def run
-      SolrSearch::SearchBuilder.run(self)
+    def options
+      if self[:options].nil?
+        write_attribute(:options, {:conditions => []})
+      else
+        self[:options]
+      end
     end
 
-    protected
-    def initialize_options
-      # ensure the options
-      # always starts with an empty
-      # hash if it hasn't been 
-      # initialized to something else
-      self.options ||= {}
-      self.conditions ||= []
+    def run
+      SolrSearch::SearchBuilder.run(self)
     end
   end
 end
