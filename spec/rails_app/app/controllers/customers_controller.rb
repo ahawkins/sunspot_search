@@ -7,5 +7,62 @@ class CustomersController < ApplicationController
       @search = CustomerSearch.new 
       @search.conditions << SolrSearch::Condition.new(:search => @search)
     end
+
+    configure_search
+  end
+
+  def configure_search
+    @search.configuration do |form|
+      # Condition configuration
+      form.condition do |c|
+        c.attribute = :revenue
+        c.name = 'Revenue'
+        c.type = :currency # Defines what operators are available
+      end
+
+      form.condition do |c|
+        c.attribute = :created_at
+        c.name = 'Added'
+        c.type = :date_time
+      end
+
+      form.condition do |c|
+        c.attribute = :last_contacted
+        c.name = 'Contacted'
+        c.type = :date_time
+      end
+
+      form.condition do |c|
+        c.attribute = :state
+        c.name = 'Kind'
+        c.type = :string
+        c.choices = {:prospect => 'Prospect', :lead => 'Lead'}
+      end
+
+      # Possible fields to search against
+      form.search_field do |field|
+        field.attribute = :name
+        field.name = 'Name'
+      end
+
+      form.search_field do |field|
+        field.attribute = :company
+        field.name = 'Company'
+      end
+
+      # Sort configurations
+
+      form.sort_option do |option|
+        option.attribute = :sort_name
+        option.name = 'Name'
+      end
+    
+      form.sort_option do |option|
+        option.attribute = :sort_name
+        option.name = 'Company'
+      end
+
+      form.pagination_options = 50, 100, 150, 200
+    end
   end
 end

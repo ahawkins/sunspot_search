@@ -3,6 +3,8 @@ require 'spec_helper'
 describe SolrSearch::Condition do
   subject { SolrSearch::Condition.new }
 
+  it { should respond_to(:choices, :choices=) }
+
   describe "#match" do
     it "should set the attribute to the argument" do
       subject.match :name

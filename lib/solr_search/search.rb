@@ -1,8 +1,6 @@
 module SolrSearch
   class Search < ActiveRecord::Base
-    cattr_accessor :form_configuration
-
-    attr_accessor :page
+    attr_accessor :form_configuration, :page
 
     serialize :fields
 
@@ -19,16 +17,11 @@ module SolrSearch
         name = to_s
         name.match(/(.+)Search/)[1].constantize
       end
-
-      def configuration
-        new_configuration = FormConfiguration.new
-        yield(new_configuration)
-        self.form_configuration = new_configuration
-      end
     end
 
-    def form_configuration
-      self.class.form_configuration
+    def configuration
+      self.form_configuration = FormConfiguration.new if form_configuration.blank?
+      yield(form_configuration)
     end
 
     def search_class

@@ -23,7 +23,6 @@ $(function(){
     var newCondition = templateCondition.clone();
     newCondition.html(newHtml);
 
-
     $(this).parents('fieldset').before(newCondition);
 
   });
@@ -31,5 +30,43 @@ $(function(){
   $('.remove_condition').live('click', function(ev) {
     ev.preventDefault();
     $(this).parents('fieldset').remove();
+  });
+
+  $('select.condition_attribute').live('change', function(ev){
+    ev.preventDefault();
+
+    var selected = $(this).val();
+
+    var config = $('form').data('condition_information');
+    var operatorNames = $('form').data('operators');
+    var attributeOperators = $('form').data('attribute_operators');
+    
+    var selectedType = config[selected]['type'];
+
+    var options = $.map(attributeOperators[selectedType], function(operator){
+      return '<option value="' + operator + '">' + operatorNames[operator] + '</option>'
+    });
+
+    $(this).closest('fieldset').find('select.condition_operator').html(options.join(' '));
+
+    if(config[selected]['choices']){
+      // the value input should be changed to a select
+      var choices = [];
+
+      for(var choice in config[selected]['choices']) {
+        choices.push('<option value="' + choice + '">' + config[selected]['choices'][choice] + '</option>')
+      }
+
+      $(this).closest('fieldset').find('select.choices').html(choices.join(' '));
+      $(this).closest('fieldset').find('li.choices').show();
+      $(this).closest('fieldset').find('li.value').hide();
+    } else {
+      // the value input should be changed to a textbox
+      // and there should be no options in the choices select
+
+      $(this).closest('fieldset').find('select.choices').html('<option></option>');
+      $(this).closest('fieldset').find('li.choices').hide();
+      $(this).closest('fieldset').find('li.value').show();
+    }
   });
 });

@@ -35,7 +35,7 @@ module SolrSearch
     end
 
     class ConditionAttribute < Attribute
-      attr_accessor :type
+      attr_accessor :type, :choices
     end
   end
 end

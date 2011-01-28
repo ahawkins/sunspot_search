@@ -5,7 +5,7 @@ module SolrSearch
     extend ActiveModel::Naming  
 
     attr_accessor :attribute, :operator, :value
-    attr_accessor :search
+    attr_accessor :search, :choices
     
     def initialize(attributes = {}, &block)
       attributes.each_pair do |name, value|

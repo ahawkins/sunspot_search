@@ -29,12 +29,16 @@ module SolrSearch
         hash
       end
       options.merge!(:collection => possible_attributes, :as => :select)
+      options[:input_html] ||= {}
+      options[:input_html][:class] = 'condition_attribute'
       input :attribute, options
     end
 
     # used for the condition nested form
     def operators(options = {})
       options.merge!(:collection => [], :as => :select)
+      options[:input_html] ||= {}
+      options[:input_html][:class] = 'condition_operator'
       input :operator, options
     end
 
@@ -44,13 +48,30 @@ module SolrSearch
       options[:button_html][:class] = "remove_condition"
       commit_button label, options
     end
+
     def value(options = {})
       options.merge!(:as => :string)
+      options[:wrapper_html] ||= {}
+      options[:wrapper_html][:style] = 'display: none'
+      options[:wrapper_html][:class] = 'value'
+
       input :value, options
     end
 
+    def choices(options = {})
+      options.merge!(:as => :select, :collection => [])
+      options[:wrapper_html] ||= {}
+      options[:wrapper_html][:style] = 'display: none'
+      options[:wrapper_html][:class] = 'choices'
+
+      options[:input_html] ||= {}
+      options[:input_html][:class] = 'choices'
+      input :choices, options
+    end
+
+
     def sort_by(options = {})
-      attributes = @object.form_configuration.sort_attributes
+      attributes = form_configuration.sort_attributes
       collection = attributes.each.inject({}) {|hash, attr| hash[attr.name] = attr.attribute ; hash }
       options.reverse_merge!(:label => 'Sort by', :collection => collection)
       input :sort_by, options
@@ -64,7 +85,7 @@ module SolrSearch
     end
 
     def pagination_options(options = {})
-      defaults = { :as => :select, :collection => @object.form_configuration.pagination_options }
+      defaults = { :as => :select, :collection => form_configuration.pagination_options }
       options.reverse_merge!(defaults)
       input :per_page, options
     end
