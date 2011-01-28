@@ -4,6 +4,17 @@
 class CustomerSearch < Search
 
   configuration do |form|
+
+    # Condition configuration
+    form.condition do |c|
+      c.attribute = :revenue
+      c.name = 'Revenue'
+      c.type = :integer # Defines what operators are available
+      # Using integer creates a drop down with operators
+      # for <, >, <=, =>, !=, and ==
+    end
+
+    # Possible fields to search against
     form.search_field do |field|
       field.attribute = :name
       field.name = 'Name'
@@ -13,6 +24,8 @@ class CustomerSearch < Search
       field.attribute = :company
       field.name = 'Company'
     end
+
+    # Sort configurations
 
     form.sort_option do |option|
       option.attribute = :sort_name

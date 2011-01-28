@@ -6,6 +6,8 @@ module SolrSearch
 
     serialize :fields
 
+    after_initialize :initialize_conditions
+
     class << self
       def searches(klass)
         @searches = klass
@@ -33,8 +35,14 @@ module SolrSearch
       self.class.search_class
     end
 
+    def initialize_conditions
+      self.conditions ||= []
+      self.conditions << Condition.new(:search => self)
+    end
+
     def conditions_attributes=(attributes)
       attributes.each_pair do |_, condition_attributes|
+        condition_attributes.merge!(:search => self)
         self.conditions << Condition.new(condition_attributes)
       end
     end

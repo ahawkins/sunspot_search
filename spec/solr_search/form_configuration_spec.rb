@@ -34,6 +34,42 @@ describe SolrSearch::FormConfiguration do
       subject.search_attributes.should include(mock_attribute)
     end
   end
+
+  it "should have an accessor for the condition options" do
+    subject.should respond_to(:condition_attributes, :condition_attributes=)
+  end
+
+  describe '#sort_option' do
+    it "should yield an condition" do
+      subject.condition do |object|
+        object.class.should eql(SolrSearch::FormConfiguration::ConditionAttribute)
+      end
+    end
+
+    it "should configure the condition" do
+      mock_condition = mock(SolrSearch::FormConfiguration::ConditionAttribute)
+      SolrSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
+
+      mock_condition.should_receive(:attribute=).with(:revenue)
+      mock_condition.should_receive(:name=).with('Revenue')
+      mock_condition.should_receive(:type=).with(:integer)
+
+      subject.condition do |c|
+        c.attribute = :revenue
+        c.name = 'Revenue'
+        c.type = :integer
+      end
+    end
+
+    it "should add the new condition to the list" do
+      mock_condition = mock(SolrSearch::FormConfiguration::ConditionAttribute)
+      SolrSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
+
+      subject.condition { nil }
+
+      subject.condition_attributes.should include(mock_condition)
+    end
+  end
   it "should have an accessor for the sort options" do
     subject.should respond_to(:sort_attributes, :sort_attributes=)
   end
