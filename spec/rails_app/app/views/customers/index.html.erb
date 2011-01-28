@@ -1,6 +1,7 @@
 <div id="#search_form">
   <%= search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
     <%= form.keywords %>
+    <%= form.search_fields %>
     <%= form.inputs 'Sort Options' do %>
       <%= form.sort_by %>
       <%= form.sort_direction %>

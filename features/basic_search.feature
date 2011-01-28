@@ -8,12 +8,25 @@ Feature: Basic Search
      * Choosing Fields for keyword searches
 
   Scenario: The users keywords matches a customer
-    Given there are these customers: 
+   Given there are these customers: 
      | Name             | Company  |
      | Adam Hawkins     | Radium   |
      | Shaun Densberger | LLNL     |
    When I go to the home page
    And I fill in "Search" with "Adam"
+   And I press "Search"
+   Then I should see the following customer:
+    | Name             | Company |
+    | Adam Hawkins     | Radium  |
+
+  Scenario: The user chooes fields to search 
+   Given there are these customers: 
+     | Name             | Company  |
+     | Adam Hawkins     | Radium   |
+     | Shaun Densberger | LLNL     |
+   When I go to the home page
+   And I fill in "Search" with "Radium"
+   And I check "Company"
    And I press "Search"
    Then I should see the following customer:
     | Name             | Company |

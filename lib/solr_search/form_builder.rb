@@ -5,6 +5,13 @@ module SolrSearch
       input :keywords, options
     end
 
+    def search_fields(options = {})
+      attributes = @object.form_configuration.search_attributes
+      collection = attributes.each.inject({}) {|hash, attr| hash[attr.name] = attr.attribute ; hash }
+      options.reverse_merge!(:collection => collection, :as => :check_boxes)
+      input :fields, options
+    end
+
     def sort_by(options = {})
       attributes = @object.form_configuration.sort_attributes
       collection = attributes.each.inject({}) {|hash, attr| hash[attr.name] = attr.attribute ; hash }

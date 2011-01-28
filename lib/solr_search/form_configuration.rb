@@ -49,6 +49,7 @@ module SolrSearch
   class FormConfiguration
     attr_accessor :sort_attributes
     attr_accessor :pagination_options
+    attr_accessor :search_attributes
 
     def sort_option
       raise RuntimeError, "This method requires a block" unless block_given?
@@ -56,6 +57,14 @@ module SolrSearch
       new_attribute = Attribute.new
       yield(new_attribute)
       self.sort_attributes << new_attribute
+    end
+
+    def search_field
+      raise RuntimeError, "This method requires a block" unless block_given?
+      self.search_attributes ||= []
+      new_attribute = Attribute.new
+      yield(new_attribute)
+      self.search_attributes << new_attribute
     end
 
     class Attribute

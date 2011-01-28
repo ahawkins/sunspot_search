@@ -21,7 +21,12 @@ ActiveRecord::Schema.define(:version => 20110125001117) do
 
   create_table "searches", :force => true do |t|
     t.string   "name"
-    t.text     "options"
+    t.string   "keywords"
+    t.string   "sort_by"
+    t.string   "sort_direction"
+    t.string   "per_page"
+    t.text     "fields"
+    t.text     "conditions"
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"

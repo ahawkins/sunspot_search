@@ -3,7 +3,15 @@ class CreateTestTables < ActiveRecord::Migration
     create_table :searches do |t|
 
       t.string :name
-      t.text :options
+      t.string :keywords
+      t.string :sort_by
+      t.string :sort_direction
+      t.string :per_page
+      
+      # things that need to be serialized
+      t.text :fields
+      t.text :conditions
+
       t.string :type
 
       t.timestamps
