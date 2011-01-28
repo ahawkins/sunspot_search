@@ -4,3 +4,8 @@ Then /^I should see the following customer:$/ do |expected_customers|
   expected_customers.diff!(actual_table)
 end
 
+Then /^I should not see any customers$/ do
+  actual_table = table(tableish('#customers tr', '.name, .company'))
+  actual_table.hashes.size.should eql(0)
+end
+
