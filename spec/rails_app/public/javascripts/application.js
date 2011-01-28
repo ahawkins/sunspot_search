@@ -2,71 +2,102 @@
 // This file is automatically included by javascript_include_tag :defaults
 //
 
-$(function(){
-  $('.add_condition').click(function(ev){
-    ev.preventDefault();
+(function($){
+  $.fn.solrSearch = function(options){
 
-    // store the template html if the user decides
-    // to remove all the conditions and start adding again
-    if(!$(this).data('templateCondition')) {
-      var templateCondition = $('.condition').first().clone();
-      $(this).data('templateCondition', templateCondition)
-    } else {
-      var templateCondition = $(this).data('templateCondition')
-    }
+    var toDatePicker = function(element) {
+      $(element).datepicker();
+    };
 
-    var newIndex = $(".condition").length;
+    var defaults = {
+      transforms: {
+        'date': toDatePicker,
+        'date_time': toDatePicker
+      }
+    };
 
-    var newHtml = templateCondition.html().replace(/_\d+_/g, '_' + newIndex + '_'); 
-    newHtml = newHtml.replace(/\[\d+\]/g, '[' + newIndex + ']');
+    var config = $.extend(defaults, options);
 
-    var newCondition = templateCondition.clone();
-    newCondition.html(newHtml);
+    $(this).data('solrSearch-config', config);
 
-    $(this).parents('fieldset').before(newCondition);
+    $('.add_condition', this).click(function(ev){
+      ev.preventDefault();
 
-  });
-
-  $('.remove_condition').live('click', function(ev) {
-    ev.preventDefault();
-    $(this).parents('fieldset').remove();
-  });
-
-  $('select.condition_attribute').live('change', function(ev){
-    ev.preventDefault();
-
-    var selected = $(this).val();
-
-    var config = $('form').data('condition_information');
-    var operatorNames = $('form').data('operators');
-    var attributeOperators = $('form').data('attribute_operators');
-    
-    var selectedType = config[selected]['type'];
-
-    var options = $.map(attributeOperators[selectedType], function(operator){
-      return '<option value="' + operator + '">' + operatorNames[operator] + '</option>'
-    });
-
-    $(this).closest('fieldset').find('select.condition_operator').html(options.join(' '));
-
-    if(config[selected]['choices']){
-      // the value input should be changed to a select
-      var choices = [];
-
-      for(var choice in config[selected]['choices']) {
-        choices.push('<option value="' + choice + '">' + config[selected]['choices'][choice] + '</option>')
+      // store the template html if the user decides
+      // to remove all the conditions and start adding again
+      if(!$(this).data('templateCondition')) {
+        var templateCondition = $('.condition').first().clone();
+        $(this).data('templateCondition', templateCondition)
+      } else {
+        var templateCondition = $(this).data('templateCondition')
       }
 
-      $(this).closest('fieldset').find('select.choices').html(choices.join(' '));
-      $(this).closest('fieldset').find('li.choices').show();
-      $(this).closest('fieldset').find('li.value').hide();
-    } else {
-      // the value input should be changed to a textbox
-      // and there should be no options in the choices select
+      var newIndex = $(".condition").length;
 
-      $(this).closest('fieldset').find('select.choices').html('<option></option>');
-      $(this).closest('fieldset').find('li.choices').hide();
-      $(this).closest('fieldset').find('li.value').show();
-    }
-  });
+      var newHtml = templateCondition.html().replace(/_\d+_/g, '_' + newIndex + '_'); 
+      newHtml = newHtml.replace(/\[\d+\]/g, '[' + newIndex + ']');
+
+      var newCondition = templateCondition.clone();
+      newCondition.html(newHtml);
+
+      $(this).parents('fieldset').before(newCondition);
+
+    });
+
+    $('.remove_condition', this).live('click', function(ev) {
+      ev.preventDefault();
+      // destroy the datpicker if present
+      $(this).closest('fieldset').find('li.value input').datepicker('destroy');
+      $(this).closest('fieldset').remove();
+    });
+
+    $('select.condition_attribute', this).live('change', function(ev){
+      ev.preventDefault();
+
+      var selected = $(this).val();
+
+      var conditions = $('form').data('condition_information');
+      var operatorNames = $('form').data('operators');
+      var attributeOperators = $('form').data('attribute_operators');
+      
+      var selectedType = conditions[selected]['type'];
+
+      var options = $.map(attributeOperators[selectedType], function(operator){
+        return '<option value="' + operator + '">' + operatorNames[operator] + '</option>'
+      });
+
+      $(this).closest('fieldset').find('select.condition_operator').html(options.join(' '));
+
+      if(conditions[selected]['choices']){
+        // the value input should be changed to a select
+        var choices = [];
+
+        for(var choice in conditions[selected]['choices']) {
+          choices.push('<option value="' + choice + '">' + conditions[selected]['choices'][choice] + '</option>')
+        }
+
+        $(this).closest('fieldset').find('select.choices').html(choices.join(' '));
+        $(this).closest('fieldset').find('li.choices').show();
+        $(this).closest('fieldset').find('li.value').hide();
+      } else {
+        // the value input should be changed to a textbox
+        // and there should be no options in the choices select
+
+        $(this).closest('fieldset').find('select.choices').html('<option></option>');
+        $(this).closest('fieldset').find('li.choices').hide();
+        $(this).closest('fieldset').find('li.value').show();
+
+        // now run the transform function for the particular type
+        
+        if(config.transforms[selectedType]) {
+          config.transforms[selectedType]($(this).closest('fieldset').find('li.value input')[0]);
+        }
+      }
+    });
+  };
+})(jQuery);
+
+
+$(function(){
+  $('form').solrSearch();
 });

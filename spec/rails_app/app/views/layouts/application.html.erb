@@ -3,7 +3,9 @@
   <head>
     <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
     <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/redmond/jquery-ui.css' %>
     <%= javascript_include_tag 'http://code.jquery.com/jquery-1.4.4.min.js' %>
+    <%= javascript_include_tag 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js' %>
     <%= javascript_include_tag 'application' %>
     <%= formtastic_stylesheet_link_tag %>
     <%= csrf_meta_tag %>
