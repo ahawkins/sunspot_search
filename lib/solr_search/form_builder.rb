@@ -28,7 +28,7 @@ module SolrSearch
         hash[condition.name] = condition.attribute
         hash
       end
-      options.merge!(:collection => possible_attributes, :as => :select)
+      options.merge!(:collection => possible_attributes, :as => :select, :include_blank => false)
       options[:input_html] ||= {}
       options[:input_html][:class] = 'condition_attribute'
       input :attribute, options

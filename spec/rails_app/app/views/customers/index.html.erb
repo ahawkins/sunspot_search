@@ -5,7 +5,7 @@
     <% end %>
 
     <%= form.inputs do %>
-      <%= form.search_fields %>
+      <%= form.search_fields :hint => "The search mataches all fields by default. You can selet fields if you only want to search them." %>
     <% end %>
 
     <%= form.conditions do |condition| %>

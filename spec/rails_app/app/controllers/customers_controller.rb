@@ -18,6 +18,7 @@ class CustomersController < ApplicationController
         c.attribute = :revenue
         c.name = 'Revenue'
         c.type = :currency # Defines what operators are available
+        c.extras = {:min => 10000, :max => 2000000, :step => 1000}
       end
 
       form.condition do |c|
@@ -37,6 +38,13 @@ class CustomersController < ApplicationController
         c.name = 'Kind'
         c.type = :string
         c.choices = {:prospect => 'Prospect', :lead => 'Lead'}
+      end
+
+      form.condition do |c|
+        c.attribute = :deals_value
+        c.name = 'Deal Value'
+        c.type = :currency
+        c.extras = {:min => 500, :max => 5000, :step => 100 }
       end
 
       # Possible fields to search against

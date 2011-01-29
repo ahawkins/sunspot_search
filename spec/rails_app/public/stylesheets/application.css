@@ -73,3 +73,20 @@ a {
 .error_messages ul {
   margin: 0;
 }
+
+
+.sliderContainer {
+  float: left;
+  width: 72%;
+}
+
+form.formtastic fieldset > ol > li > div.sliderContainer > label  {
+  float: none;
+  display: block;
+  margin-bottom: 10px
+}
+
+.sliderContainer > div {
+  width: 50%;
+}
+

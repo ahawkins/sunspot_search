@@ -20,45 +20,53 @@
 
     $(this).data('solrSearch-config', config);
 
-    $('.add_condition', this).click(function(ev){
+    var form = this;
+
+    var conditions = this.data('condition_information');
+    var operatorNames = this.data('operators');
+    var attributeOperators = this.data('attribute_operators');
+
+    $('.add_condition', form).click(function(ev){
       ev.preventDefault();
 
       // store the template html if the user decides
       // to remove all the conditions and start adding again
-      if(!$(this).data('templateCondition')) {
-        var templateCondition = $('.condition').first().clone();
-        $(this).data('templateCondition', templateCondition)
-      } else {
-        var templateCondition = $(this).data('templateCondition')
-      }
+      if(!form.data('templateCondition')) {
+        form.data('templateCondition', $('.condition', form).first().clone());
+      } 
 
-      var newIndex = $(".condition").length;
+      var newIndex = $(".condition", form).length;
 
-      var newHtml = templateCondition.html().replace(/_\d+_/g, '_' + newIndex + '_'); 
+      var newHtml = form.data('templateCondition').html().replace(/_\d+_/g, '_' + newIndex + '_'); 
       newHtml = newHtml.replace(/\[\d+\]/g, '[' + newIndex + ']');
 
-      var newCondition = templateCondition.clone();
+      var newCondition = form.data('templateCondition').clone();
       newCondition.html(newHtml);
 
       $(this).parents('fieldset').before(newCondition);
-
     });
 
-    $('.remove_condition', this).live('click', function(ev) {
+    $('.remove_condition', form).live('click', function(ev) {
       ev.preventDefault();
       // destroy the datpicker if present
       $(this).closest('fieldset').find('li.value input').datepicker('destroy');
       $(this).closest('fieldset').remove();
     });
 
-    $('select.condition_attribute', this).live('change', function(ev){
+    $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
 
-      var selected = $(this).val();
+      // store the original html so remove/add condition works with clean slate
+      
+      if(!form.data('value-template')) {
+        form.data('value-template', $(this).closest('fieldset').find('li.value').clone());
+      }
 
-      var conditions = $('form').data('condition_information');
-      var operatorNames = $('form').data('operators');
-      var attributeOperators = $('form').data('attribute_operators');
+      if(!$(this).data('choices-template')) {
+        form.data('choices-template', $(this).closest('fieldset').find('li.choices').clone());
+      }
+
+      var selected = $(this).val();
       
       var selectedType = conditions[selected]['type'];
 
@@ -69,6 +77,10 @@
       $(this).closest('fieldset').find('select.condition_operator').html(options.join(' '));
 
       if(conditions[selected]['choices']){
+        // replace the html with a fresh clone
+        
+        $(this).closest('fieldset').find('li.choices').replaceWith(form.data('choices-template').clone());
+
         // the value input should be changed to a select
         var choices = [];
 
@@ -83,6 +95,9 @@
         // the value input should be changed to a textbox
         // and there should be no options in the choices select
 
+        // replace the value html with a fresh copy
+        $(this).closest('fieldset').find('li.value').replaceWith(form.data('value-template').clone());
+
         $(this).closest('fieldset').find('select.choices').html('<option></option>');
         $(this).closest('fieldset').find('li.choices').hide();
         $(this).closest('fieldset').find('li.value').show();
@@ -90,7 +105,7 @@
         // now run the transform function for the particular type
         
         if(config.transforms[selectedType]) {
-          config.transforms[selectedType]($(this).closest('fieldset').find('li.value input')[0]);
+          config.transforms[selectedType]($(this).closest('fieldset').find('li.value input')[0], conditions[selected]);
         }
       }
     });
@@ -99,5 +114,33 @@
 
 
 $(function(){
-  $('form').solrSearch();
+  $('form').solrSearch({
+    transforms: {
+      'date': function(input) { $(input).datepicker(); },
+      'date_time': function(input) { $(input).datepicker(); },
+      'currency': function(input, condition) {
+        // only want to make one condition a slider
+        var sliderContainer  = $('<div class="sliderContainer"/>');
+        var sliderLabel = $('<label>Amount $<span>1000</span>');
+        var slider = $('<div class="slider" />');
+
+        sliderContainer.prepend(sliderLabel).append(slider);
+        $(input).parent().addClass('slider');
+        $(input).after(sliderContainer).hide();
+        $(sliderLabel).text('$1000');
+        $(slider).slider({
+          max: condition.extras.max, 
+          min: condition.extras.min, 
+          step: condition.extras.step,
+          slide: function(event, ui) {
+            $(sliderContainer).find('label').text('$' + ui.value);
+            $(input).val(ui.value);
+          }
+        });
+
+        $(input).hide();
+        $(input).closest('li').children('label:first-child').text(' ');
+      }
+    }
+  });
 });
