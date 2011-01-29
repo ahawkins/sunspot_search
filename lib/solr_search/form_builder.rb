@@ -39,6 +39,9 @@ module SolrSearch
       options.merge!(:collection => [], :as => :select)
       options[:input_html] ||= {}
       options[:input_html][:class] = 'condition_operator'
+    
+      options[:wrapper_html] ||= {}
+      options[:wrapper_html][:style] = 'display: none'
       input :operator, options
     end
 

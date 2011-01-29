@@ -90,3 +90,19 @@ form.formtastic fieldset > ol > li > div.sliderContainer > label  {
   width: 50%;
 }
 
+
+.dateRangeContainer {
+  float: left;
+  width: 72%;
+}
+
+form.formtastic fieldset > ol > li > div.dateRangeContainer > label,
+form.formtastic fieldset > ol > li > div.dateRangeContainer > input {
+  float: none;
+  display: inline;
+  margin-right: 10px;
+}
+
+form.formtastic fieldset > ol > li > div.dateRangeContainer > input {
+  width: 100px;
+}

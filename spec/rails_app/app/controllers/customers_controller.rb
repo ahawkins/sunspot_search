@@ -24,13 +24,13 @@ class CustomersController < ApplicationController
       form.condition do |c|
         c.attribute = :created_at
         c.name = 'Added'
-        c.type = :date_time
+        c.type = :date
       end
 
       form.condition do |c|
         c.attribute = :last_contacted
         c.name = 'Contacted'
-        c.type = :date_time
+        c.type = :time
       end
 
       form.condition do |c|
@@ -45,6 +45,12 @@ class CustomersController < ApplicationController
         c.name = 'Deal Value'
         c.type = :currency
         c.extras = {:min => 500, :max => 5000, :step => 100 }
+      end
+
+      form.condition do |c|
+        c.attribute = :bought_products
+        c.name = 'Bought Products?'
+        c.type = :boolean
       end
 
       # Possible fields to search against

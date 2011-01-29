@@ -53,6 +53,9 @@
       $(this).closest('fieldset').remove();
     });
 
+    // changes the operator select depending on what the attribute is.
+    // it also wipes out any modifications to the choices or value html
+    // so the new html is clean (laying way for any customer transformations)
     $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
 
@@ -66,6 +69,10 @@
         form.data('choices-template', $(this).closest('fieldset').find('li.choices').clone());
       }
 
+      // hide the choices and operators sections
+      $(this).closest('fieldset').find('li.choices').hide();
+      $(this).closest('fieldset').find('li.value').hide();
+
       var selected = $(this).val();
       
       var selectedType = conditions[selected]['type'];
@@ -74,38 +81,74 @@
         return '<option value="' + operator + '">' + operatorNames[operator] + '</option>'
       });
 
-      $(this).closest('fieldset').find('select.condition_operator').html(options.join(' '));
+      // add a blank option so the a change is required to update the UI
+      $(this).closest('fieldset').find('select.condition_operator').html('<option></option>' + options.join(' '));
+      $(this).closest('fieldset').find('select.condition_operator').parent().show();
 
-      if(conditions[selected]['choices']){
-        // replace the html with a fresh clone
-        
+      // set the choices select to the related choices
+      if(conditions[selected]['choices'] || conditions[selected]['type'] == 'boolean'){
+        // now replace the choices and value html with a fresh set for the operators to manipulate
         $(this).closest('fieldset').find('li.choices').replaceWith(form.data('choices-template').clone());
 
         // the value input should be changed to a select
         var choices = [];
 
-        for(var choice in conditions[selected]['choices']) {
-          choices.push('<option value="' + choice + '">' + conditions[selected]['choices'][choice] + '</option>')
+        if(conditions[selected]['type'] == 'boolean') {
+          choices.push('<option value="false">' + operatorNames.no + '</option>');
+          choices.push('<option value="true">' + operatorNames.yes + '</option>');
+        } else {
+          for(var choice in conditions[selected]['choices']) {
+            choices.push('<option value="' + choice + '">' + conditions[selected]['choices'][choice] + '</option>')
+          }
         }
 
         $(this).closest('fieldset').find('select.choices').html(choices.join(' '));
+
+        $(this).closest('fieldset').find('li.choices').show();
+      } else {
+        $(this).closest('fieldset').find('li.value').replaceWith(form.data('value-template').clone());
+      }
+    });
+
+    $('select.condition_operator', form).live('change', function(ev){
+      ev.preventDefault();
+
+      var selectedOperator = $(this).val();
+
+      if(selectedOperator == null) return;
+
+      var selectedAttributeKey = $(this).closest('fieldset').find('select.condition_attribute').val();
+
+      var selectedAttribute = conditions[selectedAttributeKey];
+
+      if(selectedAttribute.choices || selectedAttribute.type == 'boolean'){
+        // show the select. No transforms allowed.
         $(this).closest('fieldset').find('li.choices').show();
         $(this).closest('fieldset').find('li.value').hide();
-      } else {
-        // the value input should be changed to a textbox
-        // and there should be no options in the choices select
 
-        // replace the value html with a fresh copy
+        // only show section if the operator needs a value
+        if(selectedOperator == 'blank' || selectedOperator == 'not_blank') {
+          $(this).closest('fieldset').find('li.value, li.choices').hide();
+        }
+      } else {
+        // ensure a clean slate for the transformations to manipulate
         $(this).closest('fieldset').find('li.value').replaceWith(form.data('value-template').clone());
 
-        $(this).closest('fieldset').find('select.choices').html('<option></option>');
+        // choices should be hidden if the value is not from a predefined set
         $(this).closest('fieldset').find('li.choices').hide();
-        $(this).closest('fieldset').find('li.value').show();
 
-        // now run the transform function for the particular type
-        
-        if(config.transforms[selectedType]) {
-          config.transforms[selectedType]($(this).closest('fieldset').find('li.value input')[0], conditions[selected]);
+        // only show section if the operator needs a value
+        if(selectedOperator == 'blank' || selectedOperator == 'not_blank') {
+          $(this).closest('fieldset').find('li.value, li.choices').hide();
+        } else {
+          $(this).closest('fieldset').find('li.value').show();
+
+          // now run the transform function for the particular type
+          if(config.transforms[selectedAttribute['type']]) {
+            // build a list of arguments for the transformation function
+            var input = $(this).closest('fieldset').find('li.value input')[0];
+            config.transforms[selectedAttribute['type']](input, selectedAttribute, selectedOperator);
+          } 
         }
       }
     });
@@ -114,33 +157,67 @@
 
 
 $(function(){
-  $('form').solrSearch({
-    transforms: {
-      'date': function(input) { $(input).datepicker(); },
-      'date_time': function(input) { $(input).datepicker(); },
-      'currency': function(input, condition) {
-        // only want to make one condition a slider
-        var sliderContainer  = $('<div class="sliderContainer"/>');
-        var sliderLabel = $('<label>Amount $<span>1000</span>');
-        var slider = $('<div class="slider" />');
+  var dateTimeTransform = function(input, condition, operator) {
+    if(operator != 'between') {
+      $(input).datepicker(); 
+    } else {
+      // create some HTML for two datepickers
+      var baseID = $(input).closest('fieldset').find('li.value input').attr('id');
 
-        sliderContainer.prepend(sliderLabel).append(slider);
-        $(input).parent().addClass('slider');
-        $(input).after(sliderContainer).hide();
-        $(sliderLabel).text('$1000');
-        $(slider).slider({
-          max: condition.extras.max, 
-          min: condition.extras.min, 
-          step: condition.extras.step,
-          slide: function(event, ui) {
+      var datePickerContainer = $('<div class="dateRangeContainer" />');
+      var startLabel = $('<label>Start Date</label>');
+      var startDate = $('<input id="' + baseID + '_start_date" />');
+      var endLabel = $('<label>End Date</label>');
+      var endDate = $('<input id="' + baseID + '_end_date" />');
+
+      datePickerContainer.append(startLabel).append(startDate).append(endLabel).append(endDate);
+
+      $(input).after(datePickerContainer).hide();
+
+      var changeHandler = function() {
+        $(input).val(startDate.val() + '--' + endDate.val());
+      }
+
+      startDate.datepicker({onSelect: changeHandler});
+      endDate.datepicker({onSelect: changeHandler});
+
+      $(input).closest('li').children('label:first-child').text(' ');
+    }
+  };
+
+  $('form').solrSearch({
+  transforms: {
+    'date': dateTimeTransform,
+    'time': dateTimeTransform,
+    'currency': function(input, condition, operator) {
+      // only want to make one condition a slider
+      var sliderContainer  = $('<div class="sliderContainer"/>');
+      var sliderLabel = $('<label>Amount $<span>1000</span>');
+      var slider = $('<div class="slider" />');
+
+      sliderContainer.prepend(sliderLabel).append(slider);
+      $(input).parent().addClass('slider');
+      $(input).after(sliderContainer).hide();
+      $(sliderLabel).text('$1000');
+      $(slider).slider({
+        max: condition.extras.max, 
+        min: condition.extras.min, 
+        step: condition.extras.step,
+        range: operator == 'between',
+        slide: function(event, ui) {
+          if(operator == 'between') {
+            $(sliderContainer).find('label').text('$' + ui.values[0] + ' - ' + '$' + ui.values[1]);
+            $(input).val(ui.values[0] + ' - ' + ui.values[1]);
+          } else {
             $(sliderContainer).find('label').text('$' + ui.value);
             $(input).val(ui.value);
           }
-        });
+        }
+      });
 
-        $(input).hide();
-        $(input).closest('li').children('label:first-child').text(' ');
-      }
+      $(input).hide();
+      $(input).closest('li').children('label:first-child').text(' ');
     }
-  });
+  }
+});
 });
