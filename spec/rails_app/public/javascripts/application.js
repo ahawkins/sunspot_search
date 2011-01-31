@@ -163,6 +163,15 @@
         } else {
           fieldset.find('li.value').show();
 
+          // set and show the hint if it was given
+          // else hide it
+          if(selectedAttribute.hint != null) {
+            fieldset.find('li.value .inline-hints').text(selectedAttribute.hint).show();
+          } else {
+            fieldset.find('li.value .inline-hints').hide();
+          }
+
+
           // now run the transform function for the particular type
           if(config.transforms[selectedAttribute['type']]) {
             // build a list of arguments for the transformation function

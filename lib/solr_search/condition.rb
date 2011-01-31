@@ -10,7 +10,7 @@ module SolrSearch
     }
 
     attr_accessor :attribute, :operator, :value
-    attr_accessor :search, :choices, :type
+    attr_accessor :search, :choices, :type, :hint
     
     def initialize(attributes = {}, &block)
       attributes.each_pair do |name, value|

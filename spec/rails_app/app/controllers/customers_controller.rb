@@ -21,6 +21,7 @@ class CustomersController < ApplicationController
         c.name = 'Revenue'
         c.type = :currency # Defines what operators are available
         c.extras = {:min => 10000, :max => 2000000, :step => 1000}
+        c.hint = 'Example: 10.000,00'
       end
 
       form.condition do |c|
@@ -49,6 +50,7 @@ class CustomersController < ApplicationController
         c.attribute = :last_contacted
         c.name = 'Last Contacted'
         c.type = :time
+        c.hint = 'Example: 2011/01/25, or 2011/01/01-2011/01/15 when using "Between"'
       end
 
       # form.condition do |c|

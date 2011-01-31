@@ -76,6 +76,12 @@ module SolrSearch
 
       if @object.value.blank?
         options[:wrapper_html][:style] = 'display: none'
+        options[:hint] = 'PLACEHOLDER'
+      else
+        selected_attribute = form_configuration.condition_attributes.select do |c| 
+          c.attribute.to_sym == @object.attribute.to_sym
+        end.first
+        options[:hint] = selected_attribute.hint
       end
 
       input :value, options
