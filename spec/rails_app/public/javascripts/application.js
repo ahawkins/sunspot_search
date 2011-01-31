@@ -35,7 +35,11 @@
         form.data('templateCondition', $('.condition', form).first().clone());
       } 
 
-      var newIndex = $(".condition", form).length;
+      if(!form.data('numberConditions')) {
+        form.data('numberConditions', $('.condition', form).length);
+      }
+
+      var newIndex = form.data('numberConditions') + 1;
 
       var newHtml = form.data('templateCondition').html().replace(/_\d+_/g, '_' + newIndex + '_'); 
       newHtml = newHtml.replace(/\[\d+\]/g, '[' + newIndex + ']');
@@ -44,12 +48,14 @@
       newCondition.html(newHtml);
 
       $(this).parents('fieldset').before(newCondition);
+
+      // set the increment the counter so we never have an in collosion
+      form.data('numberConditions', newIndex + 1);
     });
 
     $('.remove_condition', form).live('click', function(ev) {
       ev.preventDefault();
-      // destroy the datpicker if present
-      $(this).closest('fieldset').find('li.value input').datepicker('destroy');
+
       $(this).closest('fieldset').remove();
     });
 
@@ -59,19 +65,20 @@
     $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
 
+      var fieldset = $(this).closest('fieldset');
+
       // store the original html so remove/add condition works with clean slate
-      
-      if(!form.data('value-template')) {
-        form.data('value-template', $(this).closest('fieldset').find('li.value').clone());
+      if(!fieldset.data('value-template')) {
+        fieldset.data('value-template', fieldset.find('li.value').clone());
       }
 
-      if(!$(this).data('choices-template')) {
-        form.data('choices-template', $(this).closest('fieldset').find('li.choices').clone());
+      if(!fieldset.data('choices-template')) {
+        fieldset.data('choices-template', fieldset.find('li.choices').clone());
       }
 
       // hide the choices and operators sections
-      $(this).closest('fieldset').find('li.choices').hide();
-      $(this).closest('fieldset').find('li.value').hide();
+      fieldset.find('li.choices').hide();
+      fieldset.find('li.value').hide();
 
       var selected = $(this).val();
       
@@ -82,13 +89,13 @@
       });
 
       // add a blank option so the a change is required to update the UI
-      $(this).closest('fieldset').find('select.condition_operator').html('<option></option>' + options.join(' '));
-      $(this).closest('fieldset').find('select.condition_operator').parent().show();
+      fieldset.find('select.condition_operator').html('<option></option>' + options.join(' '));
+      fieldset.find('select.condition_operator').parent().show();
 
       // set the choices select to the related choices
       if(conditions[selected]['choices'] || conditions[selected]['type'] == 'boolean'){
         // now replace the choices and value html with a fresh set for the operators to manipulate
-        $(this).closest('fieldset').find('li.choices').replaceWith(form.data('choices-template').clone());
+        fieldset.find('li.choices').replaceWith(fieldset.data('choices-template').clone());
 
         // the value input should be changed to a select
         var choices = [];
@@ -102,46 +109,47 @@
           }
         }
 
-        $(this).closest('fieldset').find('select.choices').html(choices.join(' '));
-
-        $(this).closest('fieldset').find('li.choices').show();
+        fieldset.find('select.choices').html(choices.join(' '));
+        fieldset.find('li.choices').show();
       } else {
-        $(this).closest('fieldset').find('li.value').replaceWith(form.data('value-template').clone());
+        fieldset.find('li.value').replaceWith(fieldset.data('value-template').clone());
       }
     });
 
     $('select.condition_operator', form).live('change', function(ev){
       ev.preventDefault();
 
+      var fieldset = $(this).closest('fieldset');
+
       var selectedOperator = $(this).val();
 
       if(selectedOperator == null) return;
 
-      var selectedAttributeKey = $(this).closest('fieldset').find('select.condition_attribute').val();
+      var selectedAttributeKey = fieldset.find('select.condition_attribute').val();
 
       var selectedAttribute = conditions[selectedAttributeKey];
 
       if(selectedAttribute.choices || selectedAttribute.type == 'boolean'){
         // show the select. No transforms allowed.
-        $(this).closest('fieldset').find('li.choices').show();
-        $(this).closest('fieldset').find('li.value').hide();
+        fieldset.find('li.choices').show();
+        fieldset.find('li.value').hide();
 
         // only show section if the operator needs a value
         if(selectedOperator == 'blank' || selectedOperator == 'not_blank') {
-          $(this).closest('fieldset').find('li.value, li.choices').hide();
+          fieldset.find('li.value, li.choices').hide();
         }
       } else {
         // ensure a clean slate for the transformations to manipulate
-        $(this).closest('fieldset').find('li.value').replaceWith(form.data('value-template').clone());
+        fieldset.find('li.value').replaceWith(fieldset.data('value-template').clone());
 
         // choices should be hidden if the value is not from a predefined set
-        $(this).closest('fieldset').find('li.choices').hide();
+        fieldset.find('li.choices').hide();
 
         // only show section if the operator needs a value
         if(selectedOperator == 'blank' || selectedOperator == 'not_blank') {
-          $(this).closest('fieldset').find('li.value, li.choices').hide();
+          fieldset.find('li.value, li.choices').hide();
         } else {
-          $(this).closest('fieldset').find('li.value').show();
+          fieldset.find('li.value').show();
 
           // now run the transform function for the particular type
           if(config.transforms[selectedAttribute['type']]) {
@@ -186,38 +194,38 @@ $(function(){
   };
 
   $('form').solrSearch({
-  transforms: {
-    'date': dateTimeTransform,
-    'time': dateTimeTransform,
-    'currency': function(input, condition, operator) {
-      // only want to make one condition a slider
-      var sliderContainer  = $('<div class="sliderContainer"/>');
-      var sliderLabel = $('<label>Amount $<span>1000</span>');
-      var slider = $('<div class="slider" />');
+    transforms: {
+      'date': dateTimeTransform,
+      'time': dateTimeTransform,
+      'currency': function(input, condition, operator) {
+        // only want to make one condition a slider
+        var sliderContainer  = $('<div class="sliderContainer"/>');
+        var sliderLabel = $('<label>Amount $<span>1000</span>');
+        var slider = $('<div class="slider" />');
 
-      sliderContainer.prepend(sliderLabel).append(slider);
-      $(input).parent().addClass('slider');
-      $(input).after(sliderContainer).hide();
-      $(sliderLabel).text('$1000');
-      $(slider).slider({
-        max: condition.extras.max, 
-        min: condition.extras.min, 
-        step: condition.extras.step,
-        range: operator == 'between',
-        slide: function(event, ui) {
-          if(operator == 'between') {
-            $(sliderContainer).find('label').text('$' + ui.values[0] + ' - ' + '$' + ui.values[1]);
-            $(input).val(ui.values[0] + ' - ' + ui.values[1]);
-          } else {
-            $(sliderContainer).find('label').text('$' + ui.value);
-            $(input).val(ui.value);
+        sliderContainer.prepend(sliderLabel).append(slider);
+        $(input).parent().addClass('slider');
+        $(input).after(sliderContainer).hide();
+        $(sliderLabel).text('$1000');
+        $(slider).slider({
+          max: condition.extras.max, 
+          min: condition.extras.min, 
+          step: condition.extras.step,
+          range: operator == 'between',
+          slide: function(event, ui) {
+            if(operator == 'between') {
+              $(sliderContainer).find('label').text('$' + ui.values[0] + ' - ' + '$' + ui.values[1]);
+              $(input).val(ui.values[0] + ' - ' + ui.values[1]);
+            } else {
+              $(sliderContainer).find('label').text('$' + ui.value);
+              $(input).val(ui.value);
+            }
           }
-        }
-      });
+        });
 
-      $(input).hide();
-      $(input).closest('li').children('label:first-child').text(' ');
+        $(input).hide();
+        $(input).closest('li').children('label:first-child').text(' ');
+      }
     }
-  }
-});
+  });
 });

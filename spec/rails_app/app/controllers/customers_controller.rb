@@ -5,7 +5,6 @@ class CustomersController < ApplicationController
       @customers = @search.run
     else
       @search = CustomerSearch.new 
-      @search.conditions << SolrSearch::Condition.new(:search => @search)
     end
 
     configure_search
