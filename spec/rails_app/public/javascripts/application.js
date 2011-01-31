@@ -65,6 +65,9 @@
     $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
 
+      // don't do anything if it's blank
+      if($(this).val() == null) { return; }
+
       var fieldset = $(this).closest('fieldset');
 
       // store the original html so remove/add condition works with clean slate
@@ -114,6 +117,9 @@
       } else {
         fieldset.find('li.value').replaceWith(fieldset.data('value-template').clone());
       }
+
+      // finally set the type
+      fieldset.find('input.type').val(conditions[selected].type);
     });
 
     $('select.condition_operator', form).live('change', function(ev){
@@ -164,6 +170,7 @@
 })(jQuery);
 
 
+/*
 $(function(){
   var dateTimeTransform = function(input, condition, operator) {
     if(operator != 'between') {
@@ -228,4 +235,9 @@ $(function(){
       }
     }
   });
+});
+*/
+
+$(function(){
+  $('form').solrSearch();
 });

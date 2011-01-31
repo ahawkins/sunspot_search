@@ -3,9 +3,11 @@ module SolrSearch
     include ActiveModel::Validations  
     include ActiveModel::Conversion  
     extend ActiveModel::Naming  
+    
+    validates :attribute, :operator, :value, :type, :presence => {:allow_blank => false}
 
     attr_accessor :attribute, :operator, :value
-    attr_accessor :search, :choices
+    attr_accessor :search, :choices, :type
     
     def initialize(attributes = {}, &block)
       attributes.each_pair do |name, value|
@@ -69,5 +71,18 @@ module SolrSearch
     def form_configuration
       search.form_configuration
     end
-  end
+
+    def attribute_value
+      case type.to_sym
+      when :currency
+        if value =~ /[,\.]\d{2}$/
+          parts = value.match /(.+)[,\.](\d{2})/
+          whole = parts[1].gsub /\D/, ''
+          "#{whole}.#{parts[2]}".to_f
+        else
+          value.gsub(/\D/,'').to_i
+        end
+      end
+    end
+   end
 end

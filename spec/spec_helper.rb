@@ -17,6 +17,8 @@ require 'solr_search'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
+require 'remarkable/active_record'
+
 RSpec.configure do |config|
   
 end

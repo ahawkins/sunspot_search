@@ -28,10 +28,14 @@ module SolrSearch
         hash[condition.name] = condition.attribute
         hash
       end
-      options.merge!(:collection => possible_attributes, :as => :select, :include_blank => false)
+      options.merge!(:collection => possible_attributes, :as => :select)
       options[:input_html] ||= {}
       options[:input_html][:class] = 'condition_attribute'
       input :attribute, options
+    end
+
+    def type
+      input :type, :as => :hidden, :wrapper_html => {:style => 'display:none' }, :input_html => {:class => 'type'}
     end
 
     # used for the condition nested form

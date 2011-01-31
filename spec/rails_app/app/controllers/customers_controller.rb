@@ -4,6 +4,9 @@ class CustomersController < ApplicationController
       @search = CustomerSearch.new params[:customer_search]
       @customers = @search.run
     else
+      @customers = Customer.search do
+        with(:revenue).greater_than(0)
+      end
       @search = CustomerSearch.new 
     end
 
@@ -23,27 +26,20 @@ class CustomersController < ApplicationController
       form.condition do |c|
         c.attribute = :created_at
         c.name = 'Added'
-        c.type = :date
-      end
-
-      form.condition do |c|
-        c.attribute = :last_contacted
-        c.name = 'Contacted'
         c.type = :time
       end
+
+      # form.condition do |c|
+      #   c.attribute = :last_contacted
+      #   c.name = 'Contacted'
+      #   c.type = :time
+      # end
 
       form.condition do |c|
         c.attribute = :state
         c.name = 'Kind'
         c.type = :string
         c.choices = {:prospect => 'Prospect', :lead => 'Lead'}
-      end
-
-      form.condition do |c|
-        c.attribute = :deals_value
-        c.name = 'Deal Value'
-        c.type = :currency
-        c.extras = {:min => 500, :max => 5000, :step => 100 }
       end
 
       form.condition do |c|

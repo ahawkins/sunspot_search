@@ -1,29 +1,31 @@
 module SolrSearch
-  # this class is responsible for taking
-  # an SolrSearch instance and translating the various
-  # options and conditions into a Sunspot call.
-  # 
-  # You should never have to interact with this class 
-  # directly. It is only the adapter between
-  # the SolrSearch model and the Sunspot query interface
   class SearchBuilder
-    def self.run(search)
-      sunspot_search = Sunspot.search search.search_class do
+    def self.run(model)
+      sunspot_search = Sunspot.search model.search_class do
         # now translate the options
-        
-        if search.keywords
-          keywords(search.keywords) do
-            searchable_fields = search.fields.reject(&:blank?)
-            fields(*searchable_fields) if !searchable_fields.empty?
+
+        if model.keywords
+          keywords(model.keywords) do
+            modelable_fields = model.fields.reject(&:blank?)
+            fields(*modelable_fields) if !modelable_fields.empty?
           end
         end
 
-        if search.sort_by.present? && search.sort_direction.present?
-          order_by search.sort_by, search.sort_direction
+        model.conditions.select(&:valid?).each do |c|
+          case c.operator.to_sym
+          when :less_than, :greater_than, :all_of, :any_of
+            with(c.attribute).send(c.operator, c.attribute_value)
+          else
+            with(c.attribute, c.attribute_value)
+          end
         end
 
-        if search.per_page.present?
-          paginate :per_page => search.per_page, :page => (search.page.blank? ? 1 : search.page)
+        if model.sort_by.present? && model.sort_direction.present?
+          order_by model.sort_by, model.sort_direction
+        end
+
+        if model.per_page.present?
+          paginate :per_page => model.per_page, :page => (model.page.blank? ? 1 : model.page)
         end
       end
 

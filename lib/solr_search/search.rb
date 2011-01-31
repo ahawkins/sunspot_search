@@ -30,11 +30,14 @@ module SolrSearch
 
     def initialize_conditions
       self.conditions ||= []
-      self.conditions << Condition.new(:search => self)
+      if conditions.blank?
+        self.conditions << Condition.new(:search => self)
+      end
     end
 
     def conditions_attributes=(attributes)
-      attributes.each_pair do |_, condition_attributes|
+      self.conditions = []
+      attributes.values.each do |condition_attributes|
         condition_attributes.merge!(:search => self)
         self.conditions << Condition.new(condition_attributes)
       end

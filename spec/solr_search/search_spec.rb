@@ -20,6 +20,12 @@ describe Search do
 
       subject.conditions_attributes= {1 => expected, 2 => expected, 3 => expected }
     end
+
+    it "should not raise an error" do
+      bug_hash = {"0"=>{"attribute"=>"revenue", "operator"=>"less_than", "type"=>"currency", "value"=>"55", "choices"=>""}}
+      subject.conditions_attributes = bug_hash
+      subject.conditions.size.should eql(1)
+    end
   end
 
   it "should have a page accessor" do

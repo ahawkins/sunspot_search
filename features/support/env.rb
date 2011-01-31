@@ -102,3 +102,5 @@ at_exit do
 end
 
 Customer.remove_all_from_index!
+
+require File.expand_path(File.dirname(__FILE__) + '/../../spec/rails_app/lib/blueprints')

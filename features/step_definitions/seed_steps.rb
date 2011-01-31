@@ -5,7 +5,9 @@ Given /^there (?:are|is) (?:this|these) customers?:$/ do |table|
       hash
     end
 
-    Customer.create!(transformed)
+    Customer.make(transformed)
   end
+
+  Customer.solr_reindex :batch_commit => false, :batch_size => nil
 end
 

@@ -22,15 +22,13 @@ module SolrSearch
       # FIXME: Localization
       # This value holds the labels for operators in the select
       operators = {
-        :less_than => "Less Than",
-        :more_than => "More Than",
-        :at_least => "At Least",
-        :at_most => "At Most",
+        :less_than => "Less than",
+        :greater_than => "More than",
         :is => "Is",
         :before => "Before",
         :after => "After",
-        :blank => "Is Blank",
-        :not_blank => "Is Not Blank",
+        :blank => "Is blank",
+        :not_blank => "Is not blank",
         :between => "Between",
         :yes => 'Yes',
         :no => 'No'
@@ -40,8 +38,8 @@ module SolrSearch
       # of attribute. The JS plugin reads this hash and updates
       # the operator drop down accordingly
       attribute_operators = {
-        :integer => [:less_than, :more_than, :at_least, :at_most, :is, :blank, :not_blank, :between],
-        :currency => [:less_than, :more_than, :at_least, :at_most, :is, :blank, :not_blank, :between],
+        :integer => [:less_than, :greater_than, :is, :blank, :not_blank, :between],
+        :currency => [:less_than, :greater_than, :is, :blank, :not_blank, :between],
         :date => [:before, :after, :is, :blank, :not_blank, :between],
         :time => [:before, :after, :is, :blank, :not_blank, :between],
         :string => [:is, :blank, :not_blank],
@@ -50,7 +48,7 @@ module SolrSearch
 
       options = args.extract_options!
       options[:builder] = FormBuilder
-      options[:html] = {}
+      options[:html] ||= {}
       options[:html]['data-condition_information'] = conditions_hash.to_json
       options[:html]['data-operators'] = operators.to_json
       options[:html]['data-attribute_operators'] = attribute_operators.to_json

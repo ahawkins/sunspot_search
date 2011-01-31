@@ -19,11 +19,11 @@ class CreateTestTables < ActiveRecord::Migration
 
     create_table "customers", :force => true do |t|
       t.string   "name"
-      t.string   "first_name"
-      t.string   "last_name"
       t.string   "company"
-      t.integer  "revenue"
+      t.float  "revenue"
       t.string   "business"
+      t.string   "state"
+      t.boolean :bought_products
     end
   end
 

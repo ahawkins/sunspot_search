@@ -8,6 +8,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 require 'solr_search'
 require 'sunspot_rails'
+require 'will_paginate'
 
 module RailsApp
   class Application < Rails::Application

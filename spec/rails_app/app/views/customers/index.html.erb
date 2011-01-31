@@ -11,6 +11,7 @@
     <%= form.conditions do |condition| %>
       <%= condition.attributes %>
       <%= condition.operators %>
+      <%= condition.type %>
       <%= condition.value %>
       <%= condition.choices %>
       <%= condition.remove_condition_button %>
@@ -41,6 +42,8 @@
       <tr>
         <th class="name">Name</th>
         <th class="company">Company</th>
+        <th>Revenue</td>
+        <th>State</th>
       </tr>
     </thead>
     <tbody>
@@ -48,8 +51,12 @@
         <tr>
           <td class="name"><%= customer.name %></td>
           <td class="company"><%= customer.company %></td>
+          <td><%= number_to_currency(customer.revenue) %></td>
+          <td><%= customer.state.titleize %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
+
+  <%= will_paginate(@customers.hits) %>
 <% end %>

@@ -14,11 +14,11 @@ ActiveRecord::Schema.define(:version => 20110125001117) do
 
   create_table "customers", :force => true do |t|
     t.string  "name"
-    t.string  "first_name"
-    t.string  "last_name"
     t.string  "company"
-    t.integer "revenue"
+    t.float   "revenue"
     t.string  "business"
+    t.string  "state"
+    t.boolean "bought_products"
   end
 
   create_table "searches", :force => true do |t|

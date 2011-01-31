@@ -3,6 +3,8 @@ require 'spec_helper'
 describe SolrSearch::Condition do
   subject { SolrSearch::Condition.new }
 
+  it { should validate_presence_of(:attribute, :operator, :value, :type, :allow_blank => false) }
+
   it { should respond_to(:choices, :choices=) }
 
   describe "#match" do
@@ -85,66 +87,30 @@ describe SolrSearch::Condition do
     end
   end
 
-  describe "#to_sunspot" do
-    before(:each) do
-      @mock_restriction = mock(Object).as_null_object
-      @mock_search = mock(Object, :with => @mock_restriction).as_null_object
-    end
+  describe "#attribute_value" do
+    describe "When the condition is a currency" do
+      subject { SolrSearch::Condition.new :type => :currency }
 
-    describe "when the operator is :less_than" do
-      subject do 
-        SolrSearch::Condition.new do |c|
-          c.match :name
-          c.less_than 5
-        end
+      it "should remove the currency" do
+        subject.value = "$1000"
+        subject.attribute_value.should eql(1000)
       end
 
-      it "should create a with(attribute).less_than restriction" do
-        @mock_restriction.should_receive(:less_than).with(5)
-        subject.to_sunspot(@mock_search)
-      end
-    end
-    
-    describe "when the operator is :greater_than" do
-      subject do 
-        SolrSearch::Condition.new do |c|
-          c.match :name
-          c.greater_than 5
-        end
+      it "should remove ,'s" do
+        subject.value = "$1,000,000"
+        subject.attribute_value.should eql(1000000)
       end
 
-      it "should create a with(attribute).greater_than restriction" do
-        @mock_restriction.should_receive(:greater_than).with(5)
-        subject.to_sunspot(@mock_search)
-      end
-    end
-
-    describe "when the operator is :all_of" do
-      subject do 
-        SolrSearch::Condition.new do |c|
-          c.match :name
-          c.all_of 1..5
-        end
+      it "should convert euro style to floats" do
+        subject.value = "1.000,00"
+        subject.attribute_value.should eql(1000.00)
       end
 
-      it "should create a with(attribute).all_of restriction" do
-        @mock_restriction.should_receive(:all_of).with(1..5)
-        subject.to_sunspot(@mock_search)
-      end
-    end
-
-    describe "when the operator is :any_of" do
-      subject do 
-        SolrSearch::Condition.new do |c|
-          c.match :name
-          c.any_of 1..5
-        end
-      end
-
-      it "should create a with(attribute).any_of restriction" do
-        @mock_restriction.should_receive(:any_of).with(1..5)
-        subject.to_sunspot(@mock_search)
+      it "should not remove any decimal digits" do
+        subject.value = "1.000,55"
+        subject.attribute_value.should eql(1000.55)
       end
     end
   end
+
 end

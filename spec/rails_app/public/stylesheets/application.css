@@ -74,6 +74,10 @@ a {
   margin: 0;
 }
 
+table {
+  width: 100%;
+}
+
 
 .sliderContainer {
   float: left;
