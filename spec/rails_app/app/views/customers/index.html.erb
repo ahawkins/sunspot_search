@@ -1,3 +1,5 @@
+<%= link_to 'Home', root_path %>
+
 <div id="#search_form">
   <%= search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
     <%= form.inputs do %>
@@ -43,7 +45,8 @@
         <th class="name">Name</th>
         <th class="company">Company</th>
         <th>Revenue</td>
-        <th>State</th>
+        <th>Rating</th>
+        <th>Kind</th>
       </tr>
     </thead>
     <tbody>
@@ -52,6 +55,7 @@
           <td class="name"><%= customer.name %></td>
           <td class="company"><%= customer.company %></td>
           <td><%= number_to_currency(customer.revenue) %></td>
+          <td><%= customer.rating %></td>
           <td><%= customer.state.titleize %></td>
         </tr>
       <% end %>

@@ -114,6 +114,9 @@
 
         fieldset.find('select.choices').html(choices.join(' '));
         fieldset.find('li.choices').show();
+
+        //fire the change event so the value is set correctly
+        fieldset.find('li.choices select').change();
       } else {
         fieldset.find('li.value').replaceWith(fieldset.data('value-template').clone());
       }
@@ -140,6 +143,9 @@
         fieldset.find('li.choices').show();
         fieldset.find('li.value').hide();
 
+        //fire the change event so the value is set correctly
+        fieldset.find('li.choices select').change();
+
         // only show section if the operator needs a value
         if(selectedOperator == 'blank' || selectedOperator == 'not_blank') {
           fieldset.find('li.value, li.choices').hide();
@@ -165,6 +171,14 @@
           } 
         }
       }
+    });
+  
+    $('select.choices', form).live('change', function(ev){
+      ev.preventDefault();
+
+      var fieldset = $(this).closest('fieldset');
+
+      $('li.value input').val($(this).val());
     });
   };
 })(jQuery);

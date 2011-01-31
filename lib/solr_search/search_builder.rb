@@ -10,7 +10,7 @@ module SolrSearch
             fields(*modelable_fields) if !modelable_fields.empty?
           end
         end
-        
+
         model.conditions.select(&:valid?).each do |c|
           case c.operator.to_sym
           when :less_than, :greater_than, :all_of, :any_of, :between
@@ -19,7 +19,7 @@ module SolrSearch
             with(c.attribute, nil)
           when :not_blank
             without(c.attribute, nil)
-          else
+          when :equal
             with(c.attribute, c.attribute_value)
           end
         end

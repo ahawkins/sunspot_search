@@ -3,6 +3,9 @@ class Customer < ActiveRecord::Base
     text :name, :company
     
     float :revenue
+    integer :deals_counter
+    float :rating
+    string :state
 
     string :sort_name do
       name.downcase

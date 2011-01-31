@@ -24,7 +24,7 @@ module SolrSearch
       operators = {
         :less_than => "Less than",
         :greater_than => "More than",
-        :is => "Is",
+        :equal => "Is",
         :before => "Before",
         :after => "After",
         :blank => "Is blank",
@@ -38,12 +38,13 @@ module SolrSearch
       # of attribute. The JS plugin reads this hash and updates
       # the operator drop down accordingly
       attribute_operators = {
-        :integer => [:less_than, :greater_than, :is, :blank, :not_blank, :between],
-        :currency => [:less_than, :greater_than, :is, :blank, :not_blank, :between],
-        :date => [:before, :after, :is, :blank, :not_blank, :between],
-        :time => [:before, :after, :is, :blank, :not_blank, :between],
-        :string => [:is, :blank, :not_blank],
-        :boolean => [:is, :blank, :not_blank]
+        :integer => [:less_than, :greater_than, :equal, :blank, :not_blank, :between],
+        :float => [:less_than, :greater_than, :equal, :blank, :not_blank, :between],
+        :currency => [:less_than, :greater_than, :equal, :blank, :not_blank, :between],
+        :date => [:before, :after, :equal, :blank, :not_blank, :between],
+        :time => [:before, :after, :equal, :blank, :not_blank, :between],
+        :string => [:equal, :blank, :not_blank],
+        :boolean => [:equal, :blank, :not_blank]
       }
 
       options = args.extract_options!

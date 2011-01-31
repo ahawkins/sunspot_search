@@ -24,10 +24,32 @@ class CustomersController < ApplicationController
       end
 
       form.condition do |c|
-        c.attribute = :created_at
-        c.name = 'Added'
-        c.type = :time
+        c.attribute = :deals_counter
+        c.name = '# Deals'
+        c.type = :integer # Defines what operators are available
       end
+
+      form.condition do |c|
+        c.attribute = :rating
+        c.name = 'Rating'
+        c.type = :float
+      end
+
+      form.condition do |c|
+        c.attribute = :state
+        c.name = 'Kind'
+        c.type = :string
+        c.choices = Customer.all.map(&:state).inject({}) do |hash, state|
+          hash[state] = state.titleize
+          hash
+        end
+      end
+
+      # form.condition do |c|
+      #   c.attribute = :created_at
+      #   c.name = 'Added'
+      #   c.type = :time
+      # end
 
       # form.condition do |c|
       #   c.attribute = :last_contacted
@@ -35,18 +57,12 @@ class CustomersController < ApplicationController
       #   c.type = :time
       # end
 
-      form.condition do |c|
-        c.attribute = :state
-        c.name = 'Kind'
-        c.type = :string
-        c.choices = {:prospect => 'Prospect', :lead => 'Lead'}
-      end
 
-      form.condition do |c|
-        c.attribute = :bought_products
-        c.name = 'Bought Products?'
-        c.type = :boolean
-      end
+      # form.condition do |c|
+      #   c.attribute = :bought_products
+      #   c.name = 'Bought Products?'
+      #   c.type = :boolean
+      # end
 
       # Possible fields to search against
       form.search_field do |field|

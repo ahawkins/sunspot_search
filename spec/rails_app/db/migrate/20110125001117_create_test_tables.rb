@@ -23,7 +23,9 @@ class CreateTestTables < ActiveRecord::Migration
       t.float  "revenue"
       t.string   "business"
       t.string   "state"
+      t.integer :deals_counter
       t.boolean :bought_products
+      t.float   :rating
     end
   end
 

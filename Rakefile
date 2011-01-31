@@ -16,8 +16,8 @@ RSpec::Core::RakeTask.new(:rcov) do |spec|
 end
 
 namespace :cucumber do
-  Cucumber::Rake::Task.new(:ok, 'Run all features that should pass')
-  Cucumber::Rake::Task.new(:wip, 'Run features that are being worked in') do |t|
+  Cucumber::Rake::Task.new({:ok => 'db:prepare'}, 'Run all features that should pass')
+  Cucumber::Rake::Task.new({:wip => 'db:prepare'}, 'Run features that are being worked in') do |t|
     t.profile = 'wip'
   end
 
@@ -27,3 +27,10 @@ task :cucumber => 'cucumber:ok'
 
 
 task :default => [:spec, :cucumber]
+
+namespace :db do
+  desc "Prepares the test database"
+  task :prepare do
+    %x(cd spec/rails_app ; rake db:migrate:reset RAILS_ENV=test)
+  end
+end

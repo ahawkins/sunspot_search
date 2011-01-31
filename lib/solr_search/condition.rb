@@ -6,7 +6,7 @@ module SolrSearch
     
     validates :attribute, :operator, :type, :presence => {:allow_blank => false}
     validates :value, :presence => {:allow_blank => false}, :unless => proc {|c| 
-      [:blank, :is_blank].include?(c.operator.to_sym) if c.operator
+      c.operator && (c.operator.to_sym == :blank || c.operator.to_sym == :is_blank)
     }
 
     attr_accessor :attribute, :operator, :value
@@ -68,12 +68,26 @@ module SolrSearch
 
     def attribute_value
       case type.to_sym
-      when :currency
+      when :currency, :float
         currency_attribute_value
+      when :integer
+        integer_attribute_value
+      when :string
+        value
       end
     end
 
     private
+    def integer_attribute_value
+      case operator.to_sym
+      when :between
+        parts = value.split('-')
+        Range.new currency_to_number(parts[0].strip).to_i, currency_to_number(parts[1].strip).to_i
+      else
+        currency_to_number(value).to_i
+      end
+    end
+    
     def currency_attribute_value
       case operator.to_sym
       when :between
@@ -85,8 +99,8 @@ module SolrSearch
     end
 
     def currency_to_number(string)
-      if string =~ /[,\.]\d{2}$/
-        parts = string.match /(.+)[,\.](\d{2})/
+      if string =~ /[,\.]\d\d?$/
+        parts = string.match /(.+)[,\.](\d\d?)/
         whole = parts[1].gsub /\D/, ''
         "#{whole}.#{parts[2]}".to_f
       else

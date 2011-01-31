@@ -4,8 +4,6 @@ module SolrSearch
 
     serialize :fields
 
-    after_initialize :initialize_conditions
-
     class << self
       def searches(klass)
         @searches = klass
@@ -26,13 +24,6 @@ module SolrSearch
 
     def search_class
       self.class.search_class
-    end
-
-    def initialize_conditions
-      self.conditions ||= []
-      if conditions.blank?
-        self.conditions << Condition.new(:search => self)
-      end
     end
 
     def conditions_attributes=(attributes)

@@ -18,7 +18,9 @@ ActiveRecord::Schema.define(:version => 20110125001117) do
     t.float   "revenue"
     t.string  "business"
     t.string  "state"
+    t.integer "deals_counter"
     t.boolean "bought_products"
+    t.float   "rating"
   end
 
   create_table "searches", :force => true do |t|

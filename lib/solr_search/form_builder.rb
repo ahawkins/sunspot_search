@@ -17,6 +17,9 @@ module SolrSearch
     end
 
     def conditions(label = 'Conditions', options = {}, &block)
+      @object.conditions ||= []
+      @object.conditions << Condition.new(:search => @object)
+
       options.merge!(:for => :conditions)
       options.reverse_merge!(:class => 'inputs condition')
       inputs label, options, &block
