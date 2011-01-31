@@ -43,12 +43,21 @@ module SolrSearch
 
     # used for the condition nested form
     def operators(options = {})
-      options.merge!(:collection => [], :as => :select)
+      options.merge!(:as => :select)
+
       options[:input_html] ||= {}
       options[:input_html][:class] = 'condition_operator'
     
       options[:wrapper_html] ||= {}
-      options[:wrapper_html][:style] = 'display: none'
+
+      if @object.operator.blank?
+        options[:wrapper_html][:style] = 'display: none'
+        options[:collection] = []
+      else
+        options[:input_html]['data-selected'] = @object.operator
+        options[:input_html][:class] += ' preselected'
+      end
+
       input :operator, options
     end
 
@@ -61,18 +70,25 @@ module SolrSearch
 
     def value(options = {})
       options.merge!(:as => :string)
+
       options[:wrapper_html] ||= {}
-      options[:wrapper_html][:style] = 'display: none'
       options[:wrapper_html][:class] = 'value'
+
+      if @object.value.blank?
+        options[:wrapper_html][:style] = 'display: none'
+      end
 
       input :value, options
     end
 
     def choices(options = {})
       options.merge!(:as => :select, :collection => [])
-      options[:wrapper_html] ||= {}
-      options[:wrapper_html][:style] = 'display: none'
-      options[:wrapper_html][:class] = 'choices'
+
+      if @object.choices.blank?
+        options[:wrapper_html] ||= {}
+        options[:wrapper_html][:style] = 'display: none'
+        options[:wrapper_html][:class] = 'choices'
+      end
 
       options[:input_html] ||= {}
       options[:input_html][:class] = 'choices'

@@ -32,7 +32,7 @@
       // store the template html if the user decides
       // to remove all the conditions and start adding again
       if(!form.data('templateCondition')) {
-        form.data('templateCondition', $('.condition', form).first().clone());
+        form.data('templateCondition', $('.condition:last', form).first().clone());
       } 
 
       if(!form.data('numberConditions')) {
@@ -172,14 +172,23 @@
         }
       }
     });
-  
+
+    // selecting one from the generated select updateds
+    // the value on the associated value
     $('select.choices', form).live('change', function(ev){
       ev.preventDefault();
 
       var fieldset = $(this).closest('fieldset');
 
-      $('li.value input').val($(this).val());
+      $('li.value input', fieldset).val($(this).val());
     });
+
+    // handle preloaded conditions
+    $('.preselected', form).each(function(){
+      $(this).closest('fieldset').find('select.condition_attribute').change();
+      $(this).val($(this).data('selected'));
+    });
+
   };
 })(jQuery);
 
