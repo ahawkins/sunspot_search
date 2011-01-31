@@ -4,7 +4,10 @@ module SolrSearch
     include ActiveModel::Conversion  
     extend ActiveModel::Naming  
     
-    validates :attribute, :operator, :value, :type, :presence => {:allow_blank => false}
+    validates :attribute, :operator, :type, :presence => {:allow_blank => false}
+    validates :value, :presence => {:allow_blank => false}, :unless => proc {|c| 
+      [:blank, :is_blank].include?(c.operator.to_sym) if c.operator
+    }
 
     attr_accessor :attribute, :operator, :value
     attr_accessor :search, :choices, :type
@@ -55,15 +58,6 @@ module SolrSearch
       self.value = array
     end
     
-    def to_sunspot(context)
-      case operator
-      when :less_than, :greater_than, :all_of, :any_of
-        context.with(attribute).send(operator, value)
-      else
-        context.with(attribute, value)
-      end
-    end
-
     def persisted?
       false
     end
@@ -75,13 +69,28 @@ module SolrSearch
     def attribute_value
       case type.to_sym
       when :currency
-        if value =~ /[,\.]\d{2}$/
-          parts = value.match /(.+)[,\.](\d{2})/
-          whole = parts[1].gsub /\D/, ''
-          "#{whole}.#{parts[2]}".to_f
-        else
-          value.gsub(/\D/,'').to_i
-        end
+        currency_attribute_value
+      end
+    end
+
+    private
+    def currency_attribute_value
+      case operator.to_sym
+      when :between
+        parts = value.split('-')
+        Range.new currency_to_number(parts[0].strip), currency_to_number(parts[1].strip)
+      else
+        currency_to_number(value)
+      end
+    end
+
+    def currency_to_number(string)
+      if string =~ /[,\.]\d{2}$/
+        parts = string.match /(.+)[,\.](\d{2})/
+        whole = parts[1].gsub /\D/, ''
+        "#{whole}.#{parts[2]}".to_f
+      else
+        string.gsub(/\D/,'').to_f
       end
     end
    end
