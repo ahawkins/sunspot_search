@@ -26,6 +26,7 @@ class CreateTestTables < ActiveRecord::Migration
       t.integer :deals_counter
       t.boolean :bought_products
       t.float   :rating
+      t.datetime :last_contacted
     end
   end
 

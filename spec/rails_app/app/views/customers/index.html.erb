@@ -47,6 +47,7 @@
         <th>Revenue</td>
         <th>Rating</th>
         <th>Kind</th>
+        <th>Last Contacted</th>
       </tr>
     </thead>
     <tbody>
@@ -57,6 +58,7 @@
           <td><%= number_to_currency(customer.revenue) %></td>
           <td><%= customer.rating %></td>
           <td><%= customer.state.titleize %></td>
+          <td><%= customer.last_contacted %></td>
         </tr>
       <% end %>
     </tbody>

@@ -13,14 +13,15 @@
 ActiveRecord::Schema.define(:version => 20110125001117) do
 
   create_table "customers", :force => true do |t|
-    t.string  "name"
-    t.string  "company"
-    t.float   "revenue"
-    t.string  "business"
-    t.string  "state"
-    t.integer "deals_counter"
-    t.boolean "bought_products"
-    t.float   "rating"
+    t.string   "name"
+    t.string   "company"
+    t.float    "revenue"
+    t.string   "business"
+    t.string   "state"
+    t.integer  "deals_counter"
+    t.boolean  "bought_products"
+    t.float    "rating"
+    t.datetime "last_contacted"
   end
 
   create_table "searches", :force => true do |t|

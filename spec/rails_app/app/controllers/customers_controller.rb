@@ -45,6 +45,12 @@ class CustomersController < ApplicationController
         end
       end
 
+      form.condition do |c|
+        c.attribute = :last_contacted
+        c.name = 'Last Contacted'
+        c.type = :time
+      end
+
       # form.condition do |c|
       #   c.attribute = :created_at
       #   c.name = 'Added'

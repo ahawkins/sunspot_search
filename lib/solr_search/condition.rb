@@ -74,6 +74,8 @@ module SolrSearch
         integer_attribute_value
       when :string
         value
+      when :time
+        time_attribute_value
       end
     end
 
@@ -88,6 +90,19 @@ module SolrSearch
       end
     end
     
+    def time_attribute_value
+      case operator.to_sym
+      when :between
+        parts = value.split('-')
+        Range.new Time.parse(parts[0]), Time.parse(parts[1])
+      when :equal
+        time = Time.parse value
+        time.at_beginning_of_day..time.end_of_day
+      else
+        Time.parse value
+      end
+    end
+
     def currency_attribute_value
       case operator.to_sym
       when :between

@@ -6,6 +6,7 @@ class Customer < ActiveRecord::Base
     integer :deals_counter
     float :rating
     string :state
+    time :last_contacted
 
     string :sort_name do
       name.downcase
