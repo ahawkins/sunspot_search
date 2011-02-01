@@ -12,7 +12,6 @@ module SolrSearch
         end
 
         model.conditions.select(&:valid?).each do |c|
-          puts c.attribute_value
           case c.operator.to_sym
           when :less_than, :greater_than, :all_of, :any_of, :between
             with(c.attribute).send(c.operator, c.attribute_value)
