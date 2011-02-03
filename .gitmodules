@@ -1,0 +1,3 @@
+[submodule "examples/sunspot_search_demo"]
+	path = examples/sunspot_search_demo
+	url = git://github.com/Adman65/sunspot_search_demo.git
