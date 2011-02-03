@@ -1,6 +1,6 @@
 class CreateTestTables < ActiveRecord::Migration
   def self.up
-    create_table :searches do |t|
+    create_table :sunspot_searches do |t|
 
       t.string :name
       t.string :keywords

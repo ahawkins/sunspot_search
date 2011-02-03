@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'sunspot_rails'
   s.add_dependency 'formtastic', '~> 1.2.3'
 
+  s.add_development_dependency 'rails', '~> 3.0.3'
+  s.add_development_dependency 'rspec', '~> 2.3.0'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'cucumber-rails'
   s.add_development_dependency 'simplecov'
@@ -27,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'will_paginate'
-  s.add_development_dependency 'machinst'
+  s.add_development_dependency 'machinist'
   s.add_development_dependency 'faker'
 
   s.files         = `git ls-files`.split("\n")

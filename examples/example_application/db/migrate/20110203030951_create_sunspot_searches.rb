@@ -1,6 +1,6 @@
 class CreateSunspotSearches < ActiveRecord::Migration
   def self.up
-    create_table :searches do |t|
+    create_table :sunspot_searches do |t|
 
       t.string :name
       t.string :keywords
@@ -10,8 +10,10 @@ class CreateSunspotSearches < ActiveRecord::Migration
       
       # things that need to be serialized
       t.text :fields
-      t.text :conditions
+      t.text :conditions 
 
+      # so you can store more than one search in the same table
+      # since the SunspotSearch::Base class inherits from ActiveRecord::Base
       t.string :type
 
       t.timestamps

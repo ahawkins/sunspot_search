@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Search do 
+describe SunspotSearch::Base do 
   describe "the class" do
     it "should have an accessor for the form configuration" do
       subject.should respond_to(:form_configuration)

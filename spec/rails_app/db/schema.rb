@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20110125001117) do
     t.datetime "last_contacted"
   end
 
-  create_table "searches", :force => true do |t|
+  create_table "sunspot_searches", :force => true do |t|
     t.string   "name"
     t.string   "keywords"
     t.string   "sort_by"

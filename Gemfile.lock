@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     sunspot_search (0.0.1)
+      formtastic (~> 1.2.3)
+      sunspot_rails
 
 GEM
   remote: http://rubygems.org/
@@ -86,7 +88,7 @@ GEM
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
     machinist (1.0.6)
-    mail (2.2.14)
+    mail (2.2.15)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -174,7 +176,7 @@ DEPENDENCIES
   infinity_test
   launchy
   machinist
-  rails (~> 3.0.0)
+  rails (~> 3.0.3)
   rspec (~> 2.3.0)
   ruby-debug19
   simplecov

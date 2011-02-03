@@ -12,7 +12,7 @@ describe SunspotSearch::SearchBuilder do
   # then further mocks/stubs can be added in each specific
   # test case
   before(:each) do
-    @mock_search = mock(SunspotSearch::Search, :search_class => Customer).as_null_object
+    @mock_search = mock(SunspotSearch::Base, :search_class => Customer).as_null_object
   end
 
   it "should create a search for the associated class" do

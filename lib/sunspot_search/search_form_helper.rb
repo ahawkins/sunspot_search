@@ -4,7 +4,7 @@ module SunspotSearch
   module SearchFormHelper
     # do stuff
 
-    def search_form_for(record_or_name_or_array, *args, &proc)
+    def sunspot_search_form_for(record_or_name_or_array, *args, &proc)
       # set options that need to present to construct the
       # search form
 

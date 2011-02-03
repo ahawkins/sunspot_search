@@ -1,7 +1,7 @@
 <%= link_to 'Home', root_path %>
 
 <div id="#search_form">
-  <%= search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
+  <%= sunspot_search_form_for(@search, :url => customers_path, :html => {:method => :get}) do |form| %>
     <%= form.inputs do %>
       <%= form.keywords %>
     <% end %>

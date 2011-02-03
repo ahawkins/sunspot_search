@@ -1,5 +1,5 @@
 module SunspotSearch
-  autoload :Search, 'sunspot_search/search'
+  autoload :Base, 'sunspot_search/base'
   autoload :Condition, 'sunspot_search/condition'
   autoload :DSL, 'sunspot_search/dsl'
   autoload :SearchFormHelper, 'sunspot_search/search_form_helper'

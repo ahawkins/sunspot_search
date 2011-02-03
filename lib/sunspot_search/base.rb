@@ -1,5 +1,7 @@
 module SunspotSearch
-  class Search < ActiveRecord::Base
+  class Base < ActiveRecord::Base
+    set_table_name 'sunspot_searches'
+
     attr_accessor :form_configuration, :page
     attr_accessor :scopes
 

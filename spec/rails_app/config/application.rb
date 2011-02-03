@@ -6,11 +6,10 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-require 'sunspot_search'
-require 'generators/install_generator'
-
 require 'sunspot_rails'
 require 'will_paginate'
+
+require 'sunspot_search'
 module RailsApp
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

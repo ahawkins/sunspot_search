@@ -1,14 +1,5 @@
 module SunspotSearch
   class Condition
-    # include ::ActiveModel::Validations  
-    # include ::ActiveModel::Conversion  
-    # extend ::ActiveModel::Naming  
-    # 
-    # validates :attribute, :operator, :type, :presence => {:allow_blank => false}
-    # validates :value, :presence => {:allow_blank => false}, :unless => proc {|c| 
-    #   c.operator && (c.operator.to_sym == :blank || c.operator.to_sym == :is_blank)
-    # }
-
     attr_accessor :attribute, :operator, :value
     attr_accessor :search, :choices, :type, :hint
     
@@ -30,44 +21,6 @@ module SunspotSearch
       end
     
       yield(self) if block_given?
-    end
-    
-    def match(attribute_name)
-      self.attribute = attribute_name
-    end
-    
-    def between(range)
-      self.operator = :between
-      self.value = range
-    end
-    alias :during :between
-    
-    def less_than(number)
-      self.operator = :less_than
-      self.value = number.to_f
-    end
-    
-    def greater_than(number)
-      self.operator = :greater_than
-      self.value = number.to_f
-    end
-    alias :more_than :greater_than
-    
-    def equal(attribute_value)
-      self.operator = :equal
-      self.value = attribute_value
-    end
-    alias :is :equal
-    alias :equal_to :equal
-    
-    def any_of(array)
-      self.operator = :any_of
-      self.value = array
-    end
-    
-    def all_of(array)
-      self.operator = :all_of
-      self.value = array
     end
     
     def persisted?
