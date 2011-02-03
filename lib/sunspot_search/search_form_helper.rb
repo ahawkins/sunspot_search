@@ -1,6 +1,6 @@
 require 'formtastic'
 
-module SolrSearch
+module SunspotSearch
   module SearchFormHelper
     # do stuff
 
@@ -13,6 +13,8 @@ module SolrSearch
       else
         form_configuration = record_or_name_or_array.form_configuration
       end
+
+      form_configuration.condition_attributes ||= []
 
       conditions_hash = form_configuration.condition_attributes.inject({}) do |hash, condition|
         hash[condition.attribute] = condition

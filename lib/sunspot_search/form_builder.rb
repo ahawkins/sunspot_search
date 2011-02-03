@@ -1,4 +1,4 @@
-module SolrSearch
+module SunspotSearch
   class FormBuilder < ::Formtastic::SemanticFormBuilder
     def form_configuration
       @form_configuration ||= @object.form_configuration
@@ -18,7 +18,7 @@ module SolrSearch
 
     def conditions(label = 'Conditions', options = {}, &block)
       @object.conditions ||= []
-      @object.conditions << Condition.new(:search => @object)
+      @object.conditions << SunspotSearch::Condition.new(:search => @object)
 
       options.merge!(:for => :conditions)
       options.reverse_merge!(:class => 'inputs condition')
@@ -34,6 +34,8 @@ module SolrSearch
       options.merge!(:collection => possible_attributes, :as => :select)
       options[:input_html] ||= {}
       options[:input_html][:class] = 'condition_attribute'
+      options[:input_html][:class] += ' preselected' if @object.attribute
+      options[:input_html]['data-selected'] = @object.attribute if @object.attribute
       input :attribute, options
     end
 
@@ -63,8 +65,9 @@ module SolrSearch
 
     # used in the condition nested form
     def remove_condition_button(label = 'Remove Condition', options = {})
-      options[:button_html] = {}
-      options[:button_html][:class] = "remove_condition"
+      options[:button_html] ||= {}
+      options[:button_html][:class] ||= ''
+      options[:button_html][:class] += " remove_condition"
       commit_button label, options
     end
 
@@ -105,14 +108,16 @@ module SolrSearch
     def sort_by(options = {})
       attributes = form_configuration.sort_attributes
       collection = attributes.each.inject({}) {|hash, attr| hash[attr.name] = attr.attribute ; hash }
-      options.reverse_merge!(:label => 'Sort by', :collection => collection)
+      options.reverse_merge!(:label => 'Sort by')
+      options.merge!(:collection => collection, :include_blank => false)
       input :sort_by, options
     end
 
     def sort_direction(options = {})
       defaults = {:asc_label => 'In order', :desc_label => 'Reverse Order', :as => :radio }
       options.reverse_merge!(defaults)
-      options[:collection] = { defaults[:asc_label] => 'asc', defaults[:desc_label] => 'desc' }
+      options[:collection] = { options[:asc_label] => 'asc', options[:desc_label] => 'desc' }
+      options.merge!(:include_blank => false)
       input :sort_direction, options
     end
 
@@ -123,8 +128,9 @@ module SolrSearch
     end
 
     def add_condition_button(label = 'Add Condition', options = {})
-      options[:button_html] = {}
-      options[:button_html][:class] = "add_condition"
+      options[:button_html] ||= {}
+      options[:button_html][:class] ||= ''
+      options[:button_html][:class] += " add_condition"
       commit_button label, options
     end
   end

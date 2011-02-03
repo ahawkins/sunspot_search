@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SolrSearch::FormConfiguration do
+describe SunspotSearch::FormConfiguration do
   it "should have an accessor for the search fields" do
     subject.should respond_to(:search_attributes, :search_attributes=)
   end
@@ -8,13 +8,13 @@ describe SolrSearch::FormConfiguration do
   describe '#search_field' do
     it "should yield an attribute" do
       subject.search_field do |object|
-        object.class.should eql(SolrSearch::FormConfiguration::Attribute)
+        object.class.should eql(SunspotSearch::FormConfiguration::Attribute)
       end
     end
 
     it "should configure the attribute" do
-      mock_attribute = mock(SolrSearch::FormConfiguration::Attribute)
-      SolrSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
+      mock_attribute = mock(SunspotSearch::FormConfiguration::Attribute)
+      SunspotSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
 
       mock_attribute.should_receive(:attribute=).with(:sort_name)
       mock_attribute.should_receive(:name=).with('Name')
@@ -26,8 +26,8 @@ describe SolrSearch::FormConfiguration do
     end
 
     it "should add the new attribute to the list" do
-      mock_attribute = mock(SolrSearch::FormConfiguration::Attribute)
-      SolrSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
+      mock_attribute = mock(SunspotSearch::FormConfiguration::Attribute)
+      SunspotSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
 
       subject.search_field { nil }
 
@@ -42,13 +42,13 @@ describe SolrSearch::FormConfiguration do
   describe '#sort_option' do
     it "should yield an condition" do
       subject.condition do |object|
-        object.class.should eql(SolrSearch::FormConfiguration::ConditionAttribute)
+        object.class.should eql(SunspotSearch::FormConfiguration::ConditionAttribute)
       end
     end
 
     it "should configure the condition" do
-      mock_condition = mock(SolrSearch::FormConfiguration::ConditionAttribute)
-      SolrSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
+      mock_condition = mock(SunspotSearch::FormConfiguration::ConditionAttribute)
+      SunspotSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
 
       mock_condition.should_receive(:attribute=).with(:revenue)
       mock_condition.should_receive(:name=).with('Revenue')
@@ -62,8 +62,8 @@ describe SolrSearch::FormConfiguration do
     end
 
     it "should add the new condition to the list" do
-      mock_condition = mock(SolrSearch::FormConfiguration::ConditionAttribute)
-      SolrSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
+      mock_condition = mock(SunspotSearch::FormConfiguration::ConditionAttribute)
+      SunspotSearch::FormConfiguration::ConditionAttribute.stub(:new => mock_condition)
 
       subject.condition { nil }
 
@@ -77,13 +77,13 @@ describe SolrSearch::FormConfiguration do
   describe '#sort_option' do
     it "should yield an attribute" do
       subject.sort_option do |object|
-        object.class.should eql(SolrSearch::FormConfiguration::Attribute)
+        object.class.should eql(SunspotSearch::FormConfiguration::Attribute)
       end
     end
 
     it "should configure the attribute" do
-      mock_attribute = mock(SolrSearch::FormConfiguration::Attribute)
-      SolrSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
+      mock_attribute = mock(SunspotSearch::FormConfiguration::Attribute)
+      SunspotSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
 
       mock_attribute.should_receive(:attribute=).with(:sort_name)
       mock_attribute.should_receive(:name=).with('Name')
@@ -95,8 +95,8 @@ describe SolrSearch::FormConfiguration do
     end
 
     it "should add the new attribute to the list" do
-      mock_attribute = mock(SolrSearch::FormConfiguration::Attribute)
-      SolrSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
+      mock_attribute = mock(SunspotSearch::FormConfiguration::Attribute)
+      SunspotSearch::FormConfiguration::Attribute.stub(:new => mock_attribute)
 
       subject.sort_option { nil }
 

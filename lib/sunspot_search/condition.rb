@@ -1,17 +1,29 @@
-module SolrSearch
+module SunspotSearch
   class Condition
-    include ActiveModel::Validations  
-    include ActiveModel::Conversion  
-    extend ActiveModel::Naming  
-    
-    validates :attribute, :operator, :type, :presence => {:allow_blank => false}
-    validates :value, :presence => {:allow_blank => false}, :unless => proc {|c| 
-      c.operator && (c.operator.to_sym == :blank || c.operator.to_sym == :is_blank)
-    }
+    # include ::ActiveModel::Validations  
+    # include ::ActiveModel::Conversion  
+    # extend ::ActiveModel::Naming  
+    # 
+    # validates :attribute, :operator, :type, :presence => {:allow_blank => false}
+    # validates :value, :presence => {:allow_blank => false}, :unless => proc {|c| 
+    #   c.operator && (c.operator.to_sym == :blank || c.operator.to_sym == :is_blank)
+    # }
 
     attr_accessor :attribute, :operator, :value
     attr_accessor :search, :choices, :type, :hint
     
+    def self.human_name
+      'condition'
+    end
+
+    def self.model_name
+      human_name
+    end
+
+    def new_record?
+      true
+    end
+
     def initialize(attributes = {}, &block)
       attributes.each_pair do |name, value|
         send("#{name}=", value)
@@ -64,6 +76,16 @@ module SolrSearch
 
     def form_configuration
       search.form_configuration
+    end
+
+    def valid?
+      flag = attribute.present? && operator.present? && type.present?
+
+      if operator && operator.to_sym != :blank && operator.to_sym != :not_blank 
+        flag && value.present?
+      else
+        flag
+      end
     end
 
     def attribute_value

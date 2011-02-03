@@ -1,4 +1,4 @@
-module SolrSearch
+module SunspotSearch
   class FormConfiguration
     attr_accessor :condition_attributes
     attr_accessor :search_attributes
@@ -35,7 +35,7 @@ module SolrSearch
     end
 
     class ConditionAttribute < Attribute
-      attr_accessor :type, :choices, :extras, :hint
+      attr_accessor :type, :choices, :extras, :hint, :allow
     end
   end
 end

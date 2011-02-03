@@ -11,15 +11,12 @@ ActiveRecord::Base.logger = nil
 
 ActiveRecord::Migrator.migrate(File.expand_path("../rails_app/db/migrate/", __FILE__))
 
-require 'solr_search'
+require 'sunspot_search'
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-require 'remarkable/active_record'
-
 RSpec.configure do |config|
   
 end
-

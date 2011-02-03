@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe SolrSearch::SearchBuilder do
-  subject { SolrSearch::SearchBuilder }
+describe SunspotSearch::SearchBuilder do
+  subject { SunspotSearch::SearchBuilder }
 
   before(:each) do 
     @sunspot = mock(Sunspot::Search::StandardSearch).as_null_object
@@ -12,7 +12,7 @@ describe SolrSearch::SearchBuilder do
   # then further mocks/stubs can be added in each specific
   # test case
   before(:each) do
-    @mock_search = mock(SolrSearch::Search, :search_class => Customer).as_null_object
+    @mock_search = mock(SunspotSearch::Search, :search_class => Customer).as_null_object
   end
 
   it "should create a search for the associated class" do

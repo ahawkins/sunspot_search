@@ -1,5 +1,5 @@
 Feature: Basic Search
-  SolrSearch provides the functionality to create basic searches.
+  SunspotSearch provides the functionality to create basic searches.
   This include things like: 
 
      * Keyword search (google style textbox)

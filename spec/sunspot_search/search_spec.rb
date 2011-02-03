@@ -13,9 +13,9 @@ describe Search do
       pending
       expected = { :attribute => 'name', :operator => 'less_than', :value => 5 }
       
-      mock_condition = mock(SolrSearch::Condition)
+      mock_condition = mock(SunspotSearch::Condition)
 
-      SolrSearch::Condition.should_receive(:new).with(expected).exactly(3).times.and_return(mock_condition)
+      SunspotSearch::Condition.should_receive(:new).with(expected).exactly(3).times.and_return(mock_condition)
       subject.conditions.should_receive(:<<).with(mock_condition).exactly(3).times
 
       subject.conditions_attributes= {1 => expected, 2 => expected, 3 => expected }

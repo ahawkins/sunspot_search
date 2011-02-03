@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solr_search (0.0.1)
+    sunspot_search (0.0.1)
 
 GEM
   remote: http://rubygems.org/
@@ -115,15 +115,6 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
-    remarkable (4.0.0.alpha4)
-      rspec (>= 2.0.0.alpha11)
-    remarkable_activemodel (4.0.0.alpha4)
-      remarkable (~> 4.0.0.alpha4)
-      rspec (>= 2.0.0.alpha11)
-    remarkable_activerecord (4.0.0.alpha4)
-      remarkable (~> 4.0.0.alpha4)
-      remarkable_activemodel (~> 4.0.0.alpha4)
-      rspec (>= 2.0.0.alpha11)
     rsolr (0.12.1)
       builder (>= 2.1.2)
     rspec (2.3.0)
@@ -179,16 +170,15 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   faker
-  formtastic
+  formtastic (~> 1.2.3)
   infinity_test
   launchy
   machinist
   rails (~> 3.0.0)
-  remarkable_activerecord (> 4.0.0alpha2)
   rspec (~> 2.3.0)
   ruby-debug19
   simplecov
-  solr_search!
   sqlite3
   sunspot_rails
+  sunspot_search!
   will_paginate
