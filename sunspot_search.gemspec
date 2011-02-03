@@ -6,13 +6,29 @@ Gem::Specification.new do |s|
   s.name        = "sunspot_search"
   s.version     = SunspotSearch::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = 'Adam Hawkins'
+  s.email       = 'adman1965@gmail.com'
+  s.homepage    = "http://github.com/Adman65/sunspot_search"
+  s.summary     = %q{Generate complicated search forms with ease}
+  s.description = %q{Generate complicates search form with things like: selecting fields, 
+    adding conditions, chaning sorting and pagination options--then run w/Sunspot}
 
   s.rubyforge_project = "sunspot_search"
+
+  s.add_dependency 'sunspot_rails'
+  s.add_dependency 'formtastic', '~> 1.2.3'
+
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'cucumber-rails'
+  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'ruby-debug19'
+  s.add_development_dependency 'infinity_test'
+  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'launchy'
+  s.add_development_dependency 'will_paginate'
+  s.add_development_dependency 'machinst'
+  s.add_development_dependency 'faker'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
