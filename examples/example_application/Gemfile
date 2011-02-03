@@ -29,9 +29,11 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # group :development, :test do
 #   gem 'webrat'
 # end
-#
+
 gem 'sunspot_search', :path => '~/projects/sunspot_search'
 gem 'sqlite3'
 gem 'formtastic'
 gem 'nifty-generators'
 gem 'will_paginate'
+gem 'haml'
+gem 'sass'

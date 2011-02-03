@@ -18,8 +18,9 @@
     // is always at a fresh state
     form.data('templateCondition', $('.condition:last', form).first().clone());
 
-    $('.add_condition', form).click(function(ev){
+    $('input.add_condition', form).click(function(ev){
       ev.preventDefault();
+      ev.stopImmediatePropagation();
       if(!form.data('numberConditions')) {
         form.data('numberConditions', $('.condition', form).length);
       }
@@ -49,7 +50,6 @@
     // so the new html is clean (laying way for any customer transformations)
     $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
-      ev.stopImmediatePropagation();
 
       // don't do anything if it's blank
       if($(this).val() == null || $(this).val() == '') { return; }
