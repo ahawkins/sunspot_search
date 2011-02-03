@@ -1,10 +1,6 @@
 (function($){
-  $.fn.sunspotSearch = function(options){
-    var defaults = {transforms: {}};
-
-    var config = $.extend(options, defaults);
-
-    $(this).data('solrSearch-config', config);
+  $.fn.sunspotSearch = function(config){
+    var transforms = $.extend({}, config);
 
     var form = this;
 
@@ -18,9 +14,8 @@
     // is always at a fresh state
     form.data('templateCondition', $('.condition:last', form).first().clone());
 
-    $('input.add_condition', form).click(function(ev){
+    $('.add_condition', form).click(function(ev){
       ev.preventDefault();
-      ev.stopImmediatePropagation();
       if(!form.data('numberConditions')) {
         form.data('numberConditions', $('.condition', form).length);
       }
@@ -50,6 +45,7 @@
     // so the new html is clean (laying way for any customer transformations)
     $('select.condition_attribute', form).live('change', function(ev){
       ev.preventDefault();
+      ev.stopImmediatePropagation();
 
       // don't do anything if it's blank
       if($(this).val() == null || $(this).val() == '') { return; }
@@ -173,10 +169,10 @@
           }
 
           // now run the transform function for the particular type
-          if(config.transforms[selectedAttribute['type']]) {
+          if(transforms[selectedAttribute['type']]) {
             // build a list of arguments for the transformation function
             var input = $(this).closest('fieldset').find('li.value input')[0];
-            config.transforms[selectedAttribute['type']](input, selectedAttribute, selectedOperator);
+            transforms[selectedAttribute['type']](input, selectedAttribute, selectedOperator);
           } 
         }
       }
@@ -209,3 +205,4 @@
     });
   };
 })(jQuery); 
+

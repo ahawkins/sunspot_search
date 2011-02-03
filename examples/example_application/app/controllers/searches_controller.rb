@@ -5,6 +5,5 @@ class SearchesController < ApplicationController
 
   def advanced
     @search = AdvancedSearch.new
-    render :index
   end
 end

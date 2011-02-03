@@ -59,3 +59,28 @@ a {
     margin: 8px 10px; }
   .error_messages ul {
     margin: 0; }
+
+.sliderContainer {
+  float: left;
+  width: 72%; }
+
+form.formtastic fieldset > ol > li > div.sliderContainer > label {
+  float: none;
+  display: block;
+  margin-bottom: 10px; }
+
+.sliderContainer > div {
+  width: 50%; }
+
+.dateRangeContainer {
+  float: left;
+  width: 72%; }
+
+form.formtastic fieldset > ol > li > div.dateRangeContainer > label,
+form.formtastic fieldset > ol > li > div.dateRangeContainer > input {
+  float: none;
+  display: inline;
+  margin-right: 10px; }
+
+form.formtastic fieldset > ol > li > div.dateRangeContainer > input {
+  width: 100px; }

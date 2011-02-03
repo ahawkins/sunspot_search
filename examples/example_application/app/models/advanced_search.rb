@@ -8,8 +8,7 @@ class AdvancedSearch < SunspotSearch::Base
         c.attribute = :downloads
         c.name = 'Downloads'
         c.type = :integer
-        c.hint = 'Example: 10.000,00, or "10.000-20.000" for "Between"'
-        c.extras = {:min => 0, :max => 12394871238}
+        c.extras = {:min => 0, :max => 1239487}
       end
 
       form.condition do |c|
@@ -23,7 +22,6 @@ class AdvancedSearch < SunspotSearch::Base
         c.attribute = :rating
         c.name = 'Rating'
         c.type = :float
-        c.hint = 'Example: 89.5'
         c.extras = {:min => 0, :max => 100}
       end
 
@@ -54,7 +52,6 @@ class AdvancedSearch < SunspotSearch::Base
         c.attribute = :created_at
         c.type = :time
         c.name = 'Added'
-        c.hint = 'Example: 2011/2/25, or 2011/2/01--2011/2/25 for "Between"'
       end
 
       # Possible fields to search against
