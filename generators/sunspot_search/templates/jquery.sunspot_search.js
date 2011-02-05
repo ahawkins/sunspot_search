@@ -1,0 +1,1 @@
+../../../lib/sunspot_search/javascripts/jquery.sunspot_search.js

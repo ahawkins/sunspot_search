@@ -1,0 +1,6 @@
+To create a migration for storing your searches:
+
+    script/generate sunspot_search migration
+
+This will generate a table to store your searches. A type column is added if
+would like to use STI to store all your searches.

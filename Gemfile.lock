@@ -172,7 +172,6 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   faker
-  formtastic (~> 1.2.3)
   infinity_test
   launchy
   machinist
@@ -181,6 +180,5 @@ DEPENDENCIES
   ruby-debug19
   simplecov
   sqlite3
-  sunspot_rails
   sunspot_search!
   will_paginate
