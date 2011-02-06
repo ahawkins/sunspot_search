@@ -34,7 +34,7 @@ module SunspotSearch
     def valid?
       flag = attribute.present? && operator.present? && type.present?
 
-      if operator && operator.to_sym != :blank && operator.to_sym != :not_blank 
+      if operator.present? && operator.to_sym != :blank && operator.to_sym != :not_blank 
         flag && value.present?
       else
         flag
