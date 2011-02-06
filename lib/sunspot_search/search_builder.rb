@@ -14,20 +14,39 @@ module SunspotSearch
         end
 
         if model.conditions.present?
-          model.conditions.each do |c|
-            case c.operator.to_sym
-            when :less_than, :greater_than, :all_of, :any_of, :between
-              with(c.attribute).send(c.operator, c.attribute_value)
-            when :before
-              with(c.attribute).less_than(c.attribute_value)
-            when :after
-              with(c.attribute).greater_than(c.attribute_value)
-            when :blank
-              with(c.attribute, nil)
-            when :not_blank
-              without(c.attribute, nil)
-            when :equal
-              with(c.attribute, c.attribute_value)
+          model.conditions.each do |condition|
+            if condition.dynamic.present?
+              dynamic condition.dynamic.to_sym do
+                case condition.operator.to_sym
+                when :less_than, :greater_than, :all_of, :any_of, :between
+                  with(condition.attribute).send(condition.operator, condition.attribute_value)
+                when :before
+                  with(condition.attribute).less_than(condition.attribute_value)
+                when :after
+                  with(condition.attribute).greater_than(condition.attribute_value)
+                when :blank
+                  with(condition.attribute, nil)
+                when :not_blank
+                  without(condition.attribute, nil)
+                when :equal
+                  with(condition.attribute, condition.attribute_value)
+                end
+              end
+            else
+              case condition.operator.to_sym
+              when :less_than, :greater_than, :all_of, :any_of, :between
+                with(condition.attribute).send(condition.operator, condition.attribute_value)
+              when :before
+                with(condition.attribute).less_than(condition.attribute_value)
+              when :after
+                with(condition.attribute).greater_than(condition.attribute_value)
+              when :blank
+                with(condition.attribute, nil)
+              when :not_blank
+                without(condition.attribute, nil)
+              when :equal
+                with(condition.attribute, condition.attribute_value)
+              end
             end
           end
         end

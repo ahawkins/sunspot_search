@@ -1,7 +1,7 @@
 module SunspotSearch
   class Condition
     attr_accessor :attribute, :operator, :value
-    attr_accessor :search, :choices, :type, :hint
+    attr_accessor :search, :choices, :type, :hint, :dynamic
     
     def self.human_name
       'condition'

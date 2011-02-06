@@ -35,7 +35,7 @@ module SunspotSearch
     end
 
     class ConditionAttribute < Attribute
-      attr_accessor :type, :choices, :extras, :hint, :allow
+      attr_accessor :type, :choices, :extras, :hint, :allow, :dynamic
     end
   end
 end

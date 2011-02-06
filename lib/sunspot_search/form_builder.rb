@@ -43,6 +43,10 @@ module SunspotSearch
       input :type, :as => :hidden, :wrapper_html => {:style => 'display:none' }, :input_html => {:class => 'type'}
     end
 
+    def dynamic
+      input :dynamic, :as => :hidden, :wrapper_html => {:style => 'display:none' }, :input_html => {:class => 'dynamic'}
+    end
+
     # used for the condition nested form
     def operators(options = {})
       options.merge!(:as => :select)

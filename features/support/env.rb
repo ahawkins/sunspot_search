@@ -95,7 +95,7 @@ require 'sunspot'
 require 'sunspot_rails'
 
 Sunspot::Rails::Server.new.start
-sleep(2) # have to sleep to let the server start
+sleep(5) # have to sleep to let the server start
 
 at_exit do
   Sunspot::Rails::Server.new.stop
