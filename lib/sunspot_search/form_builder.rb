@@ -100,8 +100,10 @@ module SunspotSearch
       if @object.choices.blank?
         options[:wrapper_html] ||= {}
         options[:wrapper_html][:style] = 'display: none'
-        options[:wrapper_html][:class] = 'choices'
       end
+
+      options[:wrapper_html][:class] ||= ' '
+      options[:wrapper_html][:class] += 'choices'
 
       options[:input_html] ||= {}
       options[:input_html][:class] = 'choices'
