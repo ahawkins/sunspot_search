@@ -30,6 +30,8 @@ module SunspotSearch
                   without(condition.attribute, nil)
                 when :equal
                   with(condition.attribute, condition.attribute_value)
+                when :not_equal
+                  without(condition.attribute, condition.attribute_value)
                 end
               end
             else
@@ -46,6 +48,8 @@ module SunspotSearch
                 without(condition.attribute, nil)
               when :equal
                 with(condition.attribute, condition.attribute_value)
+              when :not_equal
+                without(condition.attribute, condition.attribute_value)
               end
             end
           end

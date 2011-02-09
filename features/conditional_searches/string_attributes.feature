@@ -33,3 +33,13 @@ Feature: String Searches
       | Name             | Company |
       | Adam Hawkins     | Radium  |
       | Shaun Densberger | Radium  |
+
+  Scenario: The condition is for not equal to
+    Given I go to the home page
+    When I select "Kind" from "Attribute"
+    And I select "Is not" from "Operator"
+    And I select "Client" from "Choice"
+    And I press "Search"
+    Then I should see the following customers:
+      | Name             | Company  |
+      | Shaun Densberger | Radium   |

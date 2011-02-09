@@ -27,6 +27,7 @@ module SunspotSearch
         :less_than => "Less than",
         :greater_than => "More than",
         :equal => "Is",
+        :not_equal => "Is not",
         :before => "Before",
         :after => "After",
         :blank => "Is blank",
@@ -45,7 +46,7 @@ module SunspotSearch
         :currency => [:less_than, :greater_than, :equal, :blank, :not_blank, :between],
         :date => [:before, :after, :equal, :blank, :not_blank, :between],
         :time => [:before, :after, :equal, :blank, :not_blank, :between],
-        :string => [:equal, :blank, :not_blank],
+        :string => [:equal, :blank, :not_blank, :not_equal],
         :boolean => [:equal, :blank, :not_blank]
       }
 

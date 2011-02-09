@@ -1,0 +1,11 @@
+development:
+  solr:
+    hostname: localhost
+    port: 9982
+    log_level: INFO
+
+test:
+  solr:
+    hostname: localhost
+    port: 9981
+    log_level: WARNING
