@@ -97,8 +97,9 @@ module SunspotSearch
     def choices(options = {})
       options.merge!(:as => :select, :collection => [])
 
+      options[:wrapper_html] ||= {}
+
       if @object.choices.blank?
-        options[:wrapper_html] ||= {}
         options[:wrapper_html][:style] = 'display: none'
       end
 
