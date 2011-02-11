@@ -33,7 +33,8 @@ module SunspotSearch
       self.conditions = []
       attributes.values.each do |condition_attributes|
         condition_attributes.merge!(:search => self)
-        conditions << Condition.new(condition_attributes)
+        condition = Condition.new(condition_attributes)
+        conditions << condition if condition.valid?
       end
     end
 

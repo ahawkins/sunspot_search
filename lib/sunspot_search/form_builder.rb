@@ -6,6 +6,9 @@ module SunspotSearch
 
     def keywords(options = {})
       options.reverse_merge!(:label => 'Search')
+      options[:input_html] ||= {}
+      options[:input_html][:class] ||= ''
+      options[:input_html][:class] += 'keywords'
       input :keywords, options
     end
 
@@ -27,15 +30,22 @@ module SunspotSearch
 
     # used for the condition nested form
     def attributes(options = {})
-      possible_attributes = form_configuration.condition_attributes.inject({}) do |hash, condition|
+      possible_attributes = form_configuration.condition_attributes.inject(ActiveSupport::OrderedHash.new) do |hash, condition|
         hash[condition.name] = condition.attribute
         hash
       end
+
+      possible_attributes = possible_attributes.sort { |c1, c2| c1.first.downcase <=> c2.first.downcase }
+
       options.merge!(:collection => possible_attributes, :as => :select)
       options[:input_html] ||= {}
+      options[:input_html][:class] ||= ''
       options[:input_html][:class] = 'condition_attribute'
-      options[:input_html][:class] += ' preselected' if @object.attribute
-      options[:input_html]['data-selected'] = @object.attribute if @object.attribute
+
+      if @object.attribute.present?
+        options[:input_html][:class] += ' preselected'
+        options[:input_html]['data-selected'] = @object.attribute
+      end
       input :attribute, options
     end
 
@@ -52,7 +62,8 @@ module SunspotSearch
       options.merge!(:as => :select)
 
       options[:input_html] ||= {}
-      options[:input_html][:class] = 'condition_operator'
+      options[:input_html][:class] ||= ''
+      options[:input_html][:class] += ' condition_operator'
     
       options[:wrapper_html] ||= {}
 
@@ -89,6 +100,9 @@ module SunspotSearch
           c.attribute.to_sym == @object.attribute.to_sym
         end.first
         options[:hint] = selected_attribute.hint
+
+        options[:input_html] ||= {}
+        options[:input_html]['data-selected'] = @object.value
       end
 
       input :value, options
