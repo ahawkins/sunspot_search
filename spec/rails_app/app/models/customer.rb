@@ -1,12 +1,14 @@
 class Customer < ActiveRecord::Base
   searchable do 
     text :name, :company
-    
+
     float :revenue
     integer :deals_counter
     float :rating
     string :state
     time :last_contacted
+
+    boolean :bought_products
 
     string :sort_name do
       name.downcase

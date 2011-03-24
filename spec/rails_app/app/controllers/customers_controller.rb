@@ -53,6 +53,12 @@ class CustomersController < ApplicationController
         c.hint = 'Example: 2011/01/25, or 2011/01/01-2011/01/15 when using "Between"'
       end
 
+      form.condition do |c|
+        c.attribute = :bought_products
+        c.name = 'Bought Products'
+        c.type = :boolean
+      end
+
       # form.condition do |c|
       #   c.attribute = :created_at
       #   c.name = 'Added'

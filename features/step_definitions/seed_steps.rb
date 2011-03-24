@@ -7,7 +7,5 @@ Given /^there (?:are|is) (?:this|these) customers?:$/ do |table|
 
     Customer.make(transformed)
   end
-
-  Customer.solr_reindex :batch_commit => false, :batch_size => nil
 end
 

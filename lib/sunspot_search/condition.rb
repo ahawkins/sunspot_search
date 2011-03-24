@@ -56,6 +56,8 @@ module SunspotSearch
         value
       when :time
         time_attribute_value
+      when :boolean
+        boolean_attribute_value
       end
     end
 
@@ -80,6 +82,14 @@ module SunspotSearch
         time.at_beginning_of_day..time.end_of_day
       else
         Time.parse value
+      end
+    end
+
+    def boolean_attribute_value
+      if value.is_a?(TrueClass) || value.is_a?(FalseClass)
+        return value
+      elsif value.is_a?(String)
+        value.downcase == "true"
       end
     end
 

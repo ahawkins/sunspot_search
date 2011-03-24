@@ -53,38 +53,61 @@ describe SunspotSearch::Condition do
     end
   end
 
-  describe "When the condition is a currency" do
-    subject { SunspotSearch::Condition.new :type => :currency, :operator => :greater_than}
+  describe 'Condition#attribute_value' do
+    describe "When the condition is a currency" do
+      subject { SunspotSearch::Condition.new :type => :currency, :operator => :greater_than}
 
-    it "should create a range when the operator is between" do
-      subject.operator = :between
-      subject.value = "$50-$1000"
-      subject.attribute_value.should eql(50.0..1000.0)
+      it "should create a range when the operator is between" do
+        subject.operator = :between
+        subject.value = "$50-$1000"
+        subject.attribute_value.should eql(50.0..1000.0)
+      end
+
+      it "should remove the currency" do
+        subject.value = "$1000"
+        subject.attribute_value.should eql(1000.0)
+      end
+
+      it "should remove ,'s" do
+        subject.value = "$1,000,000"
+        subject.attribute_value.should eql(1000000.0)
+      end
+
+      it "should convert euro style to floats" do
+        subject.value = " $1.000,00"
+        subject.attribute_value.should eql(1000.00)
+      end
+
+      it "should not remove any decimal digits" do
+        subject.value = "1.000,55"
+        subject.attribute_value.should eql(1000.55)
+      end
+
+      it "should convert $1 to 1" do
+        subject.value = "$1"
+        subject.attribute_value.should eql(1.0)
+      end
     end
 
-    it "should remove the currency" do
-      subject.value = "$1000"
-      subject.attribute_value.should eql(1000.0)
-    end
+    describe "When the condition is a boolean" do
+      subject { SunspotSearch::Condition.new :type => :boolean }
 
-    it "should remove ,'s" do
-      subject.value = "$1,000,000"
-      subject.attribute_value.should eql(1000000.0)
-    end
+      it "should return the value if value is a boolean" do
+        subject.value = true
+        subject.attribute_value.should be_true
+        subject.value = false
+        subject.attribute_value.should be_false
+      end
 
-    it "should convert euro style to floats" do
-      subject.value = " $1.000,00"
-      subject.attribute_value.should eql(1000.00)
-    end
+      it "should be true if 'true'" do
+        subject.value = "true"
+        subject.attribute_value.should be_true
+      end
 
-    it "should not remove any decimal digits" do
-      subject.value = "1.000,55"
-      subject.attribute_value.should eql(1000.55)
-    end
-
-    it "should convert $1 to 1" do
-      subject.value = "$1"
-      subject.attribute_value.should eql(1.0)
+      it "should be false if 'false'" do
+        subject.value = 'false'
+        subject.attribute_value.should be_false
+      end
     end
   end
 
