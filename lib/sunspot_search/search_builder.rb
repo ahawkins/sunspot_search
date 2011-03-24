@@ -14,7 +14,7 @@ module SunspotSearch
         end
 
         if model.conditions.present?
-          model.conditions.select(&:valid?).each do |condition|
+          model.conditions.uniq.select(&:valid?).each do |condition|
             if condition.dynamic.present?
               dynamic condition.dynamic.to_sym do
                 case condition.operator.to_sym

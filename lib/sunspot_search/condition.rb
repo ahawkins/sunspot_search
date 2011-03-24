@@ -2,7 +2,7 @@ module SunspotSearch
   class Condition
     attr_accessor :attribute, :operator, :value
     attr_accessor :search, :choices, :type, :hint, :dynamic
-    
+
     def self.human_name
       'condition'
     end
@@ -19,10 +19,15 @@ module SunspotSearch
       attributes.each_pair do |name, value|
         send("#{name}=", value)
       end
-    
+
       yield(self) if block_given?
     end
-    
+
+    def eql?(o)
+      attribute.eql?(o.attribute) && operator.eql?(o.operator) && value.eql?(o.value)
+    end
+    alias :== :eql?
+
     def persisted?
       false
     end
@@ -64,7 +69,7 @@ module SunspotSearch
         currency_to_number(value).to_i
       end
     end
-    
+
     def time_attribute_value
       case operator.to_sym
       when :between

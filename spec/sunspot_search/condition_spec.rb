@@ -87,4 +87,41 @@ describe SunspotSearch::Condition do
       subject.attribute_value.should eql(1.0)
     end
   end
+
+  describe "Equality" do
+    subject do 
+      SunspotSearch::Condition.new :attribute => 'name',
+        :operator => :eql,
+        :value => 'Adam'
+    end
+
+    let(:other_condition) do
+      SunspotSearch::Condition.new :attribute => 'name',
+        :operator => :eql,
+        :value => 'Adam'
+    end
+
+    it "should be eql if the attribute, operator, and value are equal" do
+      subject.should eql(other_condition)
+      subject.should == other_condition
+    end
+
+    it "should not be eql if the attribute is different" do
+      other_condition.attribute = 'last_name'
+      subject.should_not eql(other_condition)
+      subject.should_not == other_condition
+    end
+
+    it "should not be eql if the operator is different" do
+      other_condition.operator = :not
+      subject.should_not eql(other_condition)
+      subject.should_not == other_condition
+    end
+
+    it "should not be eql if the value is different" do
+      other_condition.value = 'Hawkins'
+      subject.should_not eql(other_condition)
+      subject.should_not == other_condition
+    end
+  end
 end
