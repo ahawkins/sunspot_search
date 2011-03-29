@@ -18,5 +18,5 @@ require 'sunspot_search'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 RSpec.configure do |config|
-  
+  config.include SunspotSearch::Matchers
 end
