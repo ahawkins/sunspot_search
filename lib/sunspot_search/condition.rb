@@ -47,6 +47,9 @@ module SunspotSearch
     end
 
     def attribute_value
+      native_types = [Array, Fixnum, Float, Range, TrueClass, FalseClass]
+      return value if native_types.include?(value.class)
+
       case type.to_sym
       when :currency, :float
         currency_attribute_value

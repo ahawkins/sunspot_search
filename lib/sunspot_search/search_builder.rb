@@ -14,7 +14,11 @@ module SunspotSearch
         end
 
         if model.conditions.present?
-          model.conditions.uniq.select(&:valid?).each do |condition|
+          conditions = model.conditions.uniq.select(&:valid?)
+          # pass the conditions to a processor for more 
+          # fancy processing if required
+          processor = (model.processor || Processor).new(conditions, model)
+          processor.conditions.each do |condition|
             if condition.dynamic.present?
               dynamic condition.dynamic.to_sym do
                 case condition.operator.to_sym

@@ -18,10 +18,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'sunspot_rails'
   s.add_dependency 'formtastic', '~> 1.2.3'
 
+  s.add_development_dependency 'rake', '0.8.7'
   s.add_development_dependency 'rails', '~> 3.0.3'
-  s.add_development_dependency 'rspec', '~> 2.3.0'
+  s.add_development_dependency 'rspec'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'cucumber-rails'
+  s.add_development_dependency 'selenium-webdriver', '0.2.1'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'ruby-debug19'
   s.add_development_dependency 'infinity_test'

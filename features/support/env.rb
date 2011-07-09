@@ -9,7 +9,7 @@ end
 # newer version of cucumber-rails. Consider adding your own code to a new file 
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
-
+#
 # Load some stuff that seems to have issues loading in this setup
 # Apparently the formtastic railtie is not loaded when booting
 # the test application in this manner, so we have to manually
@@ -31,15 +31,10 @@ ActiveRecord::Base.logger = nil
 
 ActiveRecord::Migrator.migrate(File.expand_path("../../../spec/rails_app/db/migrate/", __FILE__))
 
-require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
-require 'cucumber/rails/world'
-require 'cucumber/rails/active_record'
-require 'cucumber/web/tableish'
+# so cucumber loads the right rails stuff
+ENV['RAILS_ROOT'] = File.expand_path("../../../spec/rails_app", __FILE__)
+require 'cucumber/rails'
 
-require 'capybara/rails'
-require 'capybara/cucumber'
-require 'capybara/session'
-require 'cucumber/rails/capybara_javascript_emulation' # Lets you click links with onclick javascript handlers without using @culerity or @javascript
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
 # prefer to use XPath just remove this line and adjust any selectors in your
@@ -81,7 +76,7 @@ if defined?(ActiveRecord::Base)
     module DatabaseCleaner
       module ActiveRecord
         def self.config_file_location
-          File.expand_path(File.dirname(__FILE__) + '/../../spec/rails_app/config/database.yml')
+          File.expand_path(File.dirname(__FILE__) + '../../../spec/rails_app/config/database.yml')
         end
       end
     end

@@ -7,6 +7,7 @@ module SunspotSearch
   autoload :FormBuilder, 'sunspot_search/form_builder'
   autoload :FormConfiguration, 'sunspot_search/form_configuration'
   autoload :Matchers, 'sunspot_search/matchers'
+  autoload :Processor, 'sunspot_search/processor'
 end
 
 if defined?(::Rails)

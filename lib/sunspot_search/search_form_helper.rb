@@ -51,7 +51,7 @@ module SunspotSearch
       }
 
       options = args.extract_options!
-      options[:builder] = FormBuilder
+      options[:builder] ||= FormBuilder
       options[:html] ||= {}
       options[:html]['data-condition_information'] = conditions_hash.to_json
       options[:html]['data-operators'] = operators.to_json

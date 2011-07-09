@@ -54,6 +54,37 @@ describe SunspotSearch::Condition do
   end
 
   describe 'Condition#attribute_value' do
+    describe "When the value is a native type" do
+      subject { SunspotSearch::Condition.new :type => :currency, :operator => :greater_than}
+
+      it "should return itself when the value is an array" do
+        subject.value = [1,2,3,4]
+        subject.attribute_value.should eql(subject.value)
+      end
+
+      it "should return itself when the vlue is an integer" do
+        subject.value = 1
+        subject.attribute_value.should eql(subject.value)
+      end
+
+      it "should return itself when the value is a float" do
+        subject.value = 1.0
+        subject.attribute_value.should eql(subject.value)
+      end
+
+      it "should return itself when the value is a range" do
+        subject.value = 1..10
+        subject.attribute_value.should eql(subject.value)
+      end
+
+      it "should return itself when the value is a boolean" do
+        subject.value = true
+        subject.attribute_value.should be_true
+        subject.value = false
+        subject.attribute_value.should be_false
+      end
+    end
+
     describe "When the condition is a currency" do
       subject { SunspotSearch::Condition.new :type => :currency, :operator => :greater_than}
 

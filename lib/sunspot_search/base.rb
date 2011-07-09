@@ -18,6 +18,11 @@ module SunspotSearch
         name = to_s
         name.match(/(.+)Search/)[1].constantize
       end
+
+      def processor(klass = nil)
+        @processor = klass if klass
+        @processor
+      end
     end
 
     def configuration
@@ -27,6 +32,10 @@ module SunspotSearch
 
     def search_class
       self.class.search_class
+    end
+
+    def processor
+      self.class.processor
     end
 
     def conditions_attributes=(attributes)
